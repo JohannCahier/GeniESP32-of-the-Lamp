@@ -357,9 +357,20 @@ def do_hello(arg, frames):
     print("hello")
 
 def do_print(arg, frames):
-    print("               To  From  Sz   Tp   -   PL...........................(chksum)")
+    print("               To  From  Sz   Tp   -   Payload......................(chksum)")
     for frame in frames:
         print("%04.8f    %s................(%s)"%(frame.timestamp, str(frame), frame.checksum))
+
+def do_myshow(arg, frames):
+    opts = CmdLineOptions(arg)
+    print("                    To  From  Sz   Tp   -   Payload......................(chksum)")
+    for frame in frames:
+        marker = ">>>> " if isinstance(frame, I2CFrame) and opts.match(frame) else "     "
+        print("%s%04.8f    %s................(%s)"%(marker,
+                                                    frame.timestamp,
+                                                    str(frame),
+                                                    frame.checksum))
+
 
 def do_count(arg, frames):
     #print(arg)
@@ -389,6 +400,8 @@ do_functions = {
                 'description': "print the frames."},
     'count' :{  'callback': do_count,
                 'description': "Count frames matching filters options"},
+    'show'  : { 'callback': do_myshow,
+                'description' : "Like print, but tag frames that match filters"},
 }
 
 
