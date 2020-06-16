@@ -16,19 +16,21 @@ class ICsvBlocParser(object):
         pass
 
     def get_timestamp(self):
-        pass
+        raise NotImplementedError("ICsvBlocParser")
     def get_destination(self):
-        pass
+        raise NotImplementedError("ICsvBlocParser")
     def get_source(self):
-        pass
+        raise NotImplementedError("ICsvBlocParser")
     def get_framesize(self):
-        pass
+        raise NotImplementedError("ICsvBlocParser")
     def get_payload(self):
-        pass
+        raise NotImplementedError("ICsvBlocParser")
+    def get_message_type(self):
+        raise NotImplementedError("ICsvBlocParser")
     #def get_fullframe(self):
-        #pass
+        #raise NotImplementedError("ICsvBlocParser")
     def get_checksum(self):
-        pass
+        raise NotImplementedError("ICsvBlocParser")
 
 
 #@implements(ICsvBlocParser)
@@ -122,6 +124,10 @@ class CsvBlocParserJon(ICsvBlocParser):
             self._framesize = self._get_byte_value(splitting[2])
         return self._framesize
 
+    def get_message_type(self):
+        splitting = self.split_csv(3)
+        return self._get_byte_value(splitting[2])
+
     def get_payload(self):
         payload = []
         for payload_line_nb in range(3, len(self.csv)-1):
@@ -184,6 +190,7 @@ class I2CFrame(object):
         self._destination = destination
         self._source = source
         self._framesize = framesize
+        self._message_type = message_type
         self._payload = payload
         self._checksum = checksum
         #self._acks = acks
@@ -194,6 +201,7 @@ class I2CFrame(object):
         self._destination = blocParser.get_destination()
         self._source = blocParser.get_source()
         self._framesize = blocParser.get_framesize()
+        self._message_type = blocParser.get_message_type()
         self._payload = blocParser.get_payload()
         self._checksum = blocParser.get_checksum()
 #        self._ = blocParser.get_()
@@ -215,6 +223,10 @@ class I2CFrame(object):
         return self._framesize
 
     @property
+    def message_type(self):
+        return self._message_type
+
+    @property
     def payload(self):
         return self._payload
 
@@ -227,10 +239,11 @@ class I2CFrame(object):
         #return self._
 
     def __str__(self):
-        str_frm = "%4.6f   %s %s %s "%(self.timestamp,
+        str_frm = "%4.6f   Fr:%s To:%s Sz:%s %s "%(self.timestamp,
                                        hex(self.destination),
                                        hex(self.source),
-                                       hex(self.framesize))
+                                       hex(self.framesize),
+                                       hex(self.message_type))
         for b in self.payload:
             str_frm += "%s "%(hex(b))
         str_frm += "%s"%(hex(self.checksum))
