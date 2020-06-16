@@ -46,11 +46,14 @@ class CsvBlocParserJon(ICsvBlocParser):
         """
         splitting = [x.strip() for x in csv_line.split(',')]
         start_regex = re.compile(cls.CSV_CELL_BYTE_VALUE_REGEX)
-        matches = start_regex.match(splitting[2])
-        if matches is not None:
-            return matches.group(1) is not None
-        #else:
-            #raise ValueError("%s should match %s"%(splitting[2], cls.CSV_CELL_BYTE_VALUE_REGEX))
+        try: #avoid out-of-bound error for CSV lines with less than 3 items
+            matches = start_regex.match(splitting[2])
+            if matches is not None:
+                return matches.group(1) is not None
+            #else:
+                #raise ValueError("%s should match %s"%(splitting[2], cls.CSV_CELL_BYTE_VALUE_REGEX))
+        except KeyError:
+            return False
 
     @staticmethod
     def is_i2c_fragment(csv_line):
@@ -58,7 +61,10 @@ class CsvBlocParserJon(ICsvBlocParser):
         Check if a given CSV line is part of an i2c frame
         """
         splitting = [x.strip() for x in csv_line.split(',')]
-        return splitting[1] == "I2C"
+        try: #avoid out-of-bound error for CSV lines with less than 2 items
+            return splitting[1] == "I2C"
+        except KeyError:
+            return False
 
     @staticmethod
     def is_annotation(csv_line):
@@ -66,7 +72,10 @@ class CsvBlocParserJon(ICsvBlocParser):
         Check if a given CSV line is part of an i2c frame
         """
         splitting = [x.strip() for x in csv_line.split(',')]
-        return splitting[1] == "Note"
+        try: #avoid out-of-bound error for CSV lines with less than 2 items
+            return splitting[1] == "Note"
+        except KeyError:
+            return False
 
     def split_csv(self, index) :
         """
@@ -103,6 +112,7 @@ class CsvBlocParserJon(ICsvBlocParser):
         self._byte_csv_val_re = re.compile(self.CSV_CELL_BYTE_VALUE_REGEX)
         self.csv = csv_lines
         self._framesize = None
+
     def get_timestamp(self):
         splitting = self.split_csv(0)
         return float(splitting[0])
@@ -130,7 +140,7 @@ class CsvBlocParserJon(ICsvBlocParser):
 
     def get_payload(self):
         payload = []
-        for payload_line_nb in range(3, len(self.csv)-1):
+        for payload_line_nb in range(4, len(self.csv)-1):
             splitting = self.split_csv(payload_line_nb)
             payload.append(self._get_byte_value(splitting[2]))
         return payload
@@ -155,6 +165,10 @@ class Frame(object):
     def timestamp(self):
         raise NotImplementedError("Frame")
 
+    @property
+    def checksum(self):
+        raise NotImplementedError("Frame")
+
 #@implements(Frame)
 class Annotation(Frame):
     """
@@ -175,16 +189,20 @@ class Annotation(Frame):
         return self._timestamp
 
     @property
+    def checksum(self):
+        return None
+
+    @property
     def info(self):
         return self._info
 
     def __str__(self):
-        str_frm = "%4.6f   %s"%(self.timestamp, self.info)
+        str_frm = "NOTE: %s"%(self.info)
         return str_frm
 
 
 #@implements(Frame)
-class I2CFrame(object):
+class I2CFrame(Frame):
     def __init__(self, timestamp, destination, source, framesize, payload, checksum, acks=None):
         self._timestamp = timestamp
         self._destination = destination
@@ -239,15 +257,16 @@ class I2CFrame(object):
         #return self._
 
     def __str__(self):
-        str_frm = "%4.6f   Fr:%s To:%s Sz:%s %s "%(self.timestamp,
-                                       hex(self.destination),
-                                       hex(self.source),
-                                       hex(self.framesize),
-                                       hex(self.message_type))
+        str_frm = "0x%02x 0x%02x 0x%02x 0x%02x  -  "%(
+                                       self.destination,
+                                       self.source,
+                                       self.framesize,
+                                       self.message_type)
         for b in self.payload:
-            str_frm += "%s "%(hex(b))
-        str_frm += "%s"%(hex(self.checksum))
-        return str_frm
+            str_frm += "0x%02x "%(b)
+        #str_frm += "%s"%(hex(self.checksum))
+        #return str_frm
+        return str_frm[:-1]
 
 
 
@@ -272,13 +291,13 @@ def load_csv_logfile(csv_file, parser):
         if line_nb == 0:
             continue #ignore title line
         csv_line = csv_line[:-1]
-        if len(csv_bloc) != 0:
-            if not parser.is_i2c_fragment(csv_line) or parser.is_start_of_frame(csv_line):
-                bloc = parser(csv_bloc)
-                frames.append(I2CFrame(bloc))
-                csv_bloc = []
 
         if parser.is_i2c_fragment(csv_line):
+            if parser.is_start_of_frame(csv_line):
+                if len(csv_bloc) != 0:
+                    bloc = parser(csv_bloc)
+                    frames.append(I2CFrame(bloc))
+                    csv_bloc = []
             csv_bloc.append(csv_line)
 
         elif parser.is_annotation(csv_line):
@@ -293,25 +312,83 @@ def load_csv_logfile(csv_file, parser):
 
 
 # ========= DO FUNCTIONS ================
-def do_hello(arg):
+class CmdLineOptions:
+    def extract_option(self, label, convert_fun):
+        try:
+            index_opt_from = arg.index("--"+label)
+            del arg[index_opt_from]
+            self._options[label] = convert_fun(arg[index_opt_from])
+            del arg[index_opt_from]
+        except Exception as e:
+            pass
+
+    def __init__(self, args):
+        assert(isinstance(args, (list,tuple)))
+        self._options = {}
+        self.extract_option("from", lambda x: int(x,0))
+        self.extract_option("to", lambda x: int(x,0))
+        self.extract_option("size", lambda x: int(x,0))
+        self.extract_option("type", lambda x: int(x,0))
+
+    def __getitem__(self, key):
+        try:
+            return self._options[key]
+        except KeyError:
+            return None
+
+    def match(self, frame : I2CFrame) -> bool:
+        for opt, value in self._options.items():
+            if   opt == "from" and frame.source       != value: return False
+            elif opt == "to"   and frame.destination  != value: return False
+            elif opt == "size" and frame.framesize    != value: return False
+            elif opt == "type" and frame.message_type != value: return False
+            if opt not in ["from", "to", "size", "type"]:
+                raise RuntimeError("FUBAR alert : CmdLineOptions _options object corrupted")
+        # if we made through here, the frame complies all the filters
+        return True
+
+    def dump(self):
+        print("Options dump : -------");
+        for opt, value in self._options.items():
+            print("\"%s\": 0x%02x"%(opt, value))
+        print("----------------------")
+
+def do_hello(arg, frames):
     print("hello")
 
-def do_default(arg):
-    frames, unparsed_lines = load_csv_logfile(sys.argv[-1], parser_types[sys.argv[-2]])
-
+def do_print(arg, frames):
+    print("               To   To   Sz   Tp   -   PL...........................(chksum)")
     for frame in frames:
-        print(str(frame))
+        print("%04.8f    %s................(%s)"%(frame.timestamp, str(frame), frame.checksum))
 
-    if len(unparsed_lines) > 0:
-        print("We got some garbage:")
-        for line in unparsed_lines:
-            print("%d: %s"%(line[0], line[1]))
-
+def do_count(arg, frames):
+    #print(arg)
+    opts = CmdLineOptions(arg)
+    #opts.dump()
+    overall_count = 0
+    individual_count = {}
+    for f in frames:
+        if isinstance(f, I2CFrame) and opts.match(f):
+            overall_count += 1
+            if str(f) in individual_count:
+                individual_count[str(f)] += 1
+            else:
+                individual_count[str(f)] = 1
+    print("Total :", overall_count)
+    print("                     To   To   Sz   Tp")
+    for frame, count in individual_count.items():
+        print(" - %5d frames are %s"%(count, frame))
 
 
 do_functions = {
-    "hello": do_hello,
-    "default" : do_default,
+    'hello': {  'callback': do_hello,
+                'description': "print 'hello' on stdout and exit."},
+    'default':{ 'callback': do_print,
+                'description': "default is alias of print"},
+    'print': {  'callback': do_print,
+                'description': "print the frames."},
+    'count' :{  'callback': do_count,
+                'description': "Count frames matching filters options"},
 }
 
 
@@ -320,12 +397,26 @@ do_functions = {
 if __name__ == "__main__":
     import sys
 
+    def do_show_errors(lines):
+        for line_nb, line_text in lines:
+            print("Error, line %d: %s"%(line_nb, line_text))
+
     def usage():
-        print("Usage : %s [--do <function>] <type> <i2c_log_file>"%sys.argv[0])
+        print("""
+Usage : %s [--do <function>] [--noerrors]
+           [--from <val>] [--to <val>] [--size <val>] [--type <val>]
+           <parser_type> <i2c_log_file>"""%sys.argv[0])
         sys.exit(-1)
 
     if len(sys.argv) < 3:
         usage()
+
+    try:
+        index_opt_do = sys.argv.index("--noerrors")
+        del sys.argv[index_opt_do]
+        show_errors = False
+    except:
+        show_errors = True
 
     try:
         index_opt_do = sys.argv.index("--do")
@@ -333,11 +424,15 @@ if __name__ == "__main__":
             usage()
             sys.exit(-1)
         del sys.argv[index_opt_do]
-        do_function = do_functions[sys.argv[index_opt_do]]
+        do_function = do_functions[sys.argv[index_opt_do]]['callback']
         del sys.argv[index_opt_do]
         arg = sys.argv[1:-2]
     except:
-        do_function = do_default
+        do_function = do_functions['default']['callback']
         arg = None
 
-    do_function(arg)
+    frames, unparsed_lines = load_csv_logfile(sys.argv[-1], parser_types[sys.argv[-2]])
+    if show_errors:
+        do_show_errors(unparsed_lines)
+
+    do_function(arg, frames)
