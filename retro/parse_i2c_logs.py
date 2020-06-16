@@ -357,7 +357,7 @@ def do_hello(arg, frames):
     print("hello")
 
 def do_print(arg, frames):
-    print("               To   To   Sz   Tp   -   PL...........................(chksum)")
+    print("               To  From  Sz   Tp   -   PL...........................(chksum)")
     for frame in frames:
         print("%04.8f    %s................(%s)"%(frame.timestamp, str(frame), frame.checksum))
 
@@ -375,7 +375,7 @@ def do_count(arg, frames):
             else:
                 individual_count[str(f)] = 1
     print("Total :", overall_count)
-    print("                     To   To   Sz   Tp")
+    print("                     To  From  Sz   Tp")
     for frame, count in individual_count.items():
         print(" - %5d frames are %s"%(count, frame))
 
