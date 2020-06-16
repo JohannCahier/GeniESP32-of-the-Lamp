@@ -38,27 +38,33 @@ class CsvBlocParserJon(ICsvBlocParser):
     CSV_CELL_BYTE_VALUE_REGEX = '(Setup Write to \[)?(0x[0-9A-Za-z]{2})(\])? \+ (N)?ACK'
 
     @classmethod
-    def _is_start_frame(cls, csv_line):
+    def is_start_of_frame(cls, csv_line):
         """
         Check if a given CSV line is a start-of-frame
         """
         splitting = [x.strip() for x in csv_line.split(',')]
         start_regex = re.compile(cls.CSV_CELL_BYTE_VALUE_REGEX)
-        print("csv_line:%s split:%s"%(csv_line, splitting))
         matches = start_regex.match(splitting[2])
         if matches is not None:
-            print(matches)
             return matches.group(1) is not None
-        else:
-            raise("%s should match %s"%(csv_line, cls.CSV_CELL_BYTE_VALUE_REGEX))
+        #else:
+            #raise ValueError("%s should match %s"%(splitting[2], cls.CSV_CELL_BYTE_VALUE_REGEX))
 
-    @classmethod
-    def _is_i2c_fragment(cls, csv_line):
+    @staticmethod
+    def is_i2c_fragment(csv_line):
         """
         Check if a given CSV line is part of an i2c frame
         """
         splitting = [x.strip() for x in csv_line.split(',')]
         return splitting[1] == "I2C"
+
+    @staticmethod
+    def is_annotation(csv_line):
+        """
+        Check if a given CSV line is part of an i2c frame
+        """
+        splitting = [x.strip() for x in csv_line.split(',')]
+        return splitting[1] == "Note"
 
     def split_csv(self, index) :
         """
@@ -109,20 +115,70 @@ class CsvBlocParserJon(ICsvBlocParser):
 
     def get_framesize(self):
         if self._framesize is None:
-            splitting = self.split_csv(2) # BEWARE OF INFINITE LOOP !
+            # <BEWARE OF="INFINITE LOOP !">
+            #splitting = self.split_csv(2) #Don't do that !
+            # </BEWARE>
+            splitting = [x.strip() for x in self.csv[2].split(',')]
             self._framesize = self._get_byte_value(splitting[2])
         return self._framesize
 
     def get_payload(self):
         payload = []
-        for payload_line in self.csv[3:-1]:
-            splitting = self.split_csv(payload_line)
+        for payload_line_nb in range(3, len(self.csv)-1):
+            splitting = self.split_csv(payload_line_nb)
             payload.append(self._get_byte_value(splitting[2]))
+        return payload
 
+    def get_checksum(self):
+        splitting = self.split_csv(-1)
+        return self._get_byte_value(splitting[2])
 
 
 
 class Frame(object):
+    """
+    Base object reprensenting a frame
+    """
+    def get_type(self):
+        raise NotImplementedError("Frame")
+
+    def __str__(self):
+        raise NotImplementedError("Frame")
+
+    @property
+    def timestamp(self):
+        raise NotImplementedError("Frame")
+
+#@implements(Frame)
+class Annotation(Frame):
+    """
+    Hand inserted annotation with timestamp
+    """
+    def __init__(self, timestamp, info):
+        self._timestamp = timestamp
+        self._info = info
+
+    # TODO: remove this destructor. Jon's format specific, this breaks the abstraction
+    def __init__(self, csv_line: str):
+        splitting = [x.strip() for x in csv_line.split(',')]
+        self._timestamp = float(splitting[0])
+        self._info = splitting[2]
+
+    @property
+    def timestamp(self):
+        return self._timestamp
+
+    @property
+    def info(self):
+        return self._info
+
+    def __str__(self):
+        str_frm = "%4.6f   %s"%(self.timestamp, self.info)
+        return str_frm
+
+
+#@implements(Frame)
+class I2CFrame(object):
     def __init__(self, timestamp, destination, source, framesize, payload, checksum, acks=None):
         self._timestamp = timestamp
         self._destination = destination
@@ -183,17 +239,11 @@ class Frame(object):
 
 
 parser_types = {
-    "Jon" : {
-        "timestamp_col": 0,
-        "data_col": 2,
-        "bloc_parser": CsvBlocParserJon,
-        "is_frame_start": CsvBlocParserJon._is_start_frame,
-        "is_i2c_fragment": CsvBlocParserJon._is_i2c_fragment,
-    }
+    "Jon" : CsvBlocParserJon,
 }
 
 
-def load_csv_log(csv_file, parser_type):
+def load_csv_logfile(csv_file, parser):
     frames = []
 
     if isinstance(csv_file, io.IOBase):
@@ -209,32 +259,72 @@ def load_csv_log(csv_file, parser_type):
         if line_nb == 0:
             continue #ignore title line
         csv_line = csv_line[:-1]
-        print("L %5d: %s"%(line_nb, csv_line))
         if len(csv_bloc) != 0:
-            if parser_type["is_frame_start"](csv_line) or\
-            not parser_type["is_i2c_fragment"](csv_line):
-                bloc_parser = parser_type["bloc_parser"](csv_bloc)
-                print("Parse this bloc: ", csv_bloc)
-                frames.append(Frame(bloc_parser))
+            if not parser.is_i2c_fragment(csv_line) or parser.is_start_of_frame(csv_line):
+                bloc = parser(csv_bloc)
+                frames.append(I2CFrame(bloc))
                 csv_bloc = []
 
-        if parser_type["is_i2c_fragment"](csv_line):
+        if parser.is_i2c_fragment(csv_line):
             csv_bloc.append(csv_line)
 
-        #if parser_type["bloc_parser"].is_annotation(csv_line):
-            #frames.append(Annotation(csv_line))
+        elif parser.is_annotation(csv_line):
+            frames.append(Annotation(csv_line))
+
         else:
             unparsed_lines.append([line_nb, csv_line])
 
-    return frames
+    return frames, unparsed_lines
+
+
+
+
+# ========= DO FUNCTIONS ================
+def do_hello(arg):
+    print("hello")
+
+def do_default(arg):
+    frames, unparsed_lines = load_csv_logfile(sys.argv[-1], parser_types[sys.argv[-2]])
+
+    for frame in frames:
+        print(str(frame))
+
+    if len(unparsed_lines) > 0:
+        print("We got some garbage:")
+        for line in unparsed_lines:
+            print("%d: %s"%(line[0], line[1]))
+
+
+
+do_functions = {
+    "hello": do_hello,
+    "default" : do_default,
+}
+
+
 
 
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) != 2:
-        print("Usage : %s <i2c_log_file>"%sys.argv[0])
-        sys.exit(-1)
-    frames = load_csv_log(sys.argv[1], parser_types["Jon"])
 
-    for frame in frames:
-        print(str(frame))
+    def usage():
+        print("Usage : %s [--do <function>] <type> <i2c_log_file>"%sys.argv[0])
+        sys.exit(-1)
+
+    if len(sys.argv) < 3:
+        usage()
+
+    try:
+        index_opt_do = sys.argv.index("--do")
+        if index_opt_do + 1 == len(sys.argv):
+            usage()
+            sys.exit(-1)
+        del sys.argv[index_opt_do]
+        do_function = do_functions[sys.argv[index_opt_do]]
+        del sys.argv[index_opt_do]
+        arg = sys.argv[1:-2]
+    except:
+        do_function = do_default
+        arg = None
+
+    do_function(arg)
