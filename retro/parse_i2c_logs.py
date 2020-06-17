@@ -2,14 +2,25 @@
 
 import re
 import io
-#from accessify import implements
 
+# The @implements decorator checks a class implements an interface
+#from accessify import implements
 
 
 class ICsvBlocParser(object):
     """
     The interface any .CSV I2C log parser must conform
     """
+    @classmethod
+    def is_start_of_frame(cls, csv_line):
+        raise NotImplementedError("ICsvBlocParser")
+    @staticmethod
+    def is_i2c_fragment(csv_line):
+        raise NotImplementedError("ICsvBlocParser")
+    @staticmethod
+    def is_annotation(csv_line):
+        raise NotImplementedError("ICsvBlocParser")
+
     def __init__(self, csv_lines):
         # TODO : check format
         self.csv = csv_lines
@@ -30,6 +41,13 @@ class ICsvBlocParser(object):
     #def get_fullframe(self):
         #raise NotImplementedError("ICsvBlocParser")
     def get_checksum(self):
+        raise NotImplementedError("ICsvBlocParser")
+
+    @staticmethod
+    def get_expected_header() -> str:
+        """
+        implementation should return the CSV header line
+        """
         raise NotImplementedError("ICsvBlocParser")
 
 
@@ -149,7 +167,9 @@ class CsvBlocParserJon(ICsvBlocParser):
         splitting = self.split_csv(-1)
         return self._get_byte_value(splitting[2])
 
-
+    @staticmethod
+    def get_expected_header():
+        return "Time [s], Analyzer Name, Decoded Protocol Result"
 
 class Frame(object):
     """
@@ -274,6 +294,16 @@ parser_types = {
     "Jon" : CsvBlocParserJon,
 }
 
+class CSVFormattingError(Exception):
+    """Exception raised when the CSV header line doesn't match the parser's expectation
+    Attributes:
+        expected -- expected header
+        found -- found header
+    """
+    def __init__(self, expected, found):
+        self.expected = expected
+        self.found = found
+
 
 def load_csv_logfile(csv_file, parser):
     frames = []
@@ -288,11 +318,13 @@ def load_csv_logfile(csv_file, parser):
     csv_bloc = []
     unparsed_lines = []
     for line_nb, csv_line in enumerate(in_file):
-        if line_nb == 0:
-            continue #ignore title line
-        csv_line = csv_line[:-1]
+        if line_nb == 0 and csv_line != parser.get_expected_header():
+            raise CSVFormattingError(parser.get_expected_header(), csv_line)
+
+        csv_line = csv_line[:-1] #get rid of \n
 
         if parser.is_i2c_fragment(csv_line):
+            # is new frame ? If yes, add the current 'bloc' as a new parsed frame
             if parser.is_start_of_frame(csv_line):
                 if len(csv_bloc) != 0:
                     bloc = parser(csv_bloc)
@@ -301,8 +333,10 @@ def load_csv_logfile(csv_file, parser):
             csv_bloc.append(csv_line)
 
         elif parser.is_annotation(csv_line):
+            # NOTE : if annotation is interleaved in frame, it will appear in
+            #        frames list before the current bloc. timestamps may mitigate this. Don't bother for now...
             frames.append(Annotation(csv_line))
-
+        # This CSV line looks definitely suspicious...
         else:
             unparsed_lines.append([line_nb, csv_line])
 
@@ -412,7 +446,7 @@ if __name__ == "__main__":
 
     def do_show_errors(lines):
         for line_nb, line_text in lines:
-            print("Error, line %d: %s"%(line_nb, line_text))
+            print("Error, line %d: `%s`"%(line_nb, line_text))
 
     def usage():
         print("""
