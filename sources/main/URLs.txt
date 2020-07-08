@@ -1,0 +1,12 @@
+<address>
+
+http(s)://<address>/
+
+http(s)://<address>/state/on(?intensity=0x3F)
+http(s)://<address>/state/off
+
+http(s)://<address>/state/toggle
+
+http(s)://<address>/ambient_light?value=0xFFFF
+
+
