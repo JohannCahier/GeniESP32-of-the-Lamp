@@ -2,6 +2,9 @@
 
 This project emulates a Lamp i²c controller, using ESP32 boards and [esp-idf](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/index.html) based software.
 
+NOTE : the `sources/` sub directory is the ESP-IDF project. You won't be able to run the build command `esp.py` outside its boundaries.
+
+
 ## Getting the toolchain and starting the environment
 
 Just follow steps 1..4 of the very well written [Get Started Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html) on Espressif's website. 
@@ -10,7 +13,7 @@ Just follow steps 1..4 of the very well written [Get Started Guide](https://docs
 
 Just source : 
 
-1. the virtualenv script in $HOME/.espressif/ 
+1. the virtualenv script in `$HOME/.espressif/`
 2. the export.sh file in you ESP-IDF install
 
 and then run `idf.py`. It will be very informative about missing / mismatching dependencies.
@@ -18,7 +21,7 @@ and then run `idf.py`. It will be very informative about missing / mismatching d
 
 ## project configuration
 
-
+![KConfig showcase](doc/images/Kconfig.png)
 
 
 ## retro-engineering the i²c protocol 
