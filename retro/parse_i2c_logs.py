@@ -55,7 +55,7 @@ class ICsvBlocParser(object):
 class CsvBlocParserJon(ICsvBlocParser):
     # ========= WELCOME TO THE MARVELOUS HELPERWORLD ===============
 
-    CSV_CELL_BYTE_VALUE_REGEX = '(Setup Write to \[)?(0x[0-9A-Za-z]{2})(\])? \+ (N)?ACK'
+    CSV_CELL_BYTE_VALUE_REGEX = '(Setup Write to \[)?(0x[0-9A-Za-z]{2})(\])? \+ (NAK|ACK)'
 
     @classmethod
     def is_start_of_frame(cls, csv_line):
@@ -103,7 +103,9 @@ class CsvBlocParserJon(ICsvBlocParser):
             raise ValueError("CsvBlocParserJon::get_timestamp csv[%d] has no comma (%s)"%(index, self.csv[index]))
         splitting = [x.strip() for x in self.csv[index].split(',')]
         #assert(splitting[2].startswith("Setup Write to ["))
-        assert(len(self.csv) == self.get_framesize()) # BEWARE OF INFINITE LOOP !
+        #assert(self.get_framesize() is None or len(self.csv) == self.get_framesize()) # BEWARE OF INFINITE LOOP !
+        if self.get_framesize() is not None and len(self.csv) != self.get_framesize():
+            print("Warning, Unvalide frame !! %s", self.csv)
         return splitting
 
     def _get_byte_value_and_ack(self, byte_csv_cell):
@@ -113,9 +115,9 @@ class CsvBlocParserJon(ICsvBlocParser):
         grp = self._byte_csv_val_re.match(byte_csv_cell)
         if grp is not None:
             byte_value = int(grp.group(2), 0)
-            ack = grp.group(3) is None
+            ack = grp.group(3) == "ACK"
             return byte_value, ack
-        raise ValueError("_get_byte_value_and_ack : %s doesn't match %s"%(byte_csv_cell, ))
+        raise ValueError("_get_byte_value_and_ack : %s doesn't match %s"%(byte_csv_cell, self.CSV_CELL_BYTE_VALUE_REGEX))
     def _get_byte_value(self, byte_csv_cell):
         """
         same but drops ack status
@@ -129,7 +131,12 @@ class CsvBlocParserJon(ICsvBlocParser):
         ICsvBlocParser.__init__(self, csv_lines)
         self._byte_csv_val_re = re.compile(self.CSV_CELL_BYTE_VALUE_REGEX)
         self.csv = csv_lines
-        self._framesize = None
+        # For frames with NAK: eek, ugly...
+        #TODO : consider initing _framesize to len(csv_lines), maybe crosscheck afterward ?
+        if len(self.csv) < 3:
+            self._framesize = len(self.csv)
+        else:
+            self._framesize = None
 
     def get_timestamp(self):
         splitting = self.split_csv(0)
@@ -140,11 +147,15 @@ class CsvBlocParserJon(ICsvBlocParser):
         return self._get_byte_value(splitting[2])
 
     def get_source(self):
+        if len(self.csv) < 2:
+            return None
         splitting = self.split_csv(1)
         return self._get_byte_value(splitting[2])
 
     def get_framesize(self):
-        if self._framesize is None:
+        if len(self.csv) < 3:
+            return None
+        elif self._framesize is None:
             # <BEWARE OF="INFINITE LOOP !">
             #splitting = self.split_csv(2) #Don't do that !
             # </BEWARE>
@@ -153,10 +164,14 @@ class CsvBlocParserJon(ICsvBlocParser):
         return self._framesize
 
     def get_message_type(self):
+        if len(self.csv) < 4:
+            return None
         splitting = self.split_csv(3)
         return self._get_byte_value(splitting[2])
 
     def get_payload(self):
+        if len(self.csv) < 5:
+            return []
         payload = []
         for payload_line_nb in range(4, len(self.csv)-1):
             splitting = self.split_csv(payload_line_nb)
@@ -277,11 +292,15 @@ class I2CFrame(Frame):
         #return self._
 
     def __str__(self):
-        str_frm = "0x%02x 0x%02x 0x%02x 0x%02x  -  "%(
-                                       self.destination,
-                                       self.source,
-                                       self.framesize,
-                                       self.message_type)
+        destination = "0x%02x"%(self.destination) if self.destination is not None else "    "
+        source = "0x%02x"%(self.source) if self.source is not None else "    "
+        framesize = "0x%02x"%(self.framesize) if self.framesize is not None else "    "
+        message_type = "0x%02x"%(self.message_type) if self.message_type is not None else "    "
+        str_frm = "%s %s %s %s  -  "%(
+                                       destination,
+                                       source,
+                                       framesize,
+                                       message_type)
         for b in self.payload:
             str_frm += "0x%02x "%(b)
         #str_frm += "%s"%(hex(self.checksum))
@@ -318,10 +337,13 @@ def load_csv_logfile(csv_file, parser):
     csv_bloc = []
     unparsed_lines = []
     for line_nb, csv_line in enumerate(in_file):
-        if line_nb == 0 and csv_line != parser.get_expected_header():
-            raise CSVFormattingError(parser.get_expected_header(), csv_line)
-
         csv_line = csv_line[:-1] #get rid of \n
+
+        if line_nb == 0:
+            if csv_line != parser.get_expected_header():
+                raise CSVFormattingError(parser.get_expected_header(), csv_line)
+            # drop the format line and
+            continue
 
         if parser.is_i2c_fragment(csv_line):
             # is new frame ? If yes, add the current 'bloc' as a new parsed frame
@@ -338,7 +360,9 @@ def load_csv_logfile(csv_file, parser):
             frames.append(Annotation(csv_line))
         # This CSV line looks definitely suspicious...
         else:
-            unparsed_lines.append([line_nb, csv_line])
+            #unparsed_lines.append([line_nb, csv_line])
+            ts = 0.0 if len(frames) == 0 else frames[-1].timestamp
+            frames.append(Annotation("%.15f, Note, %s"%(ts, csv_line)))
 
     return frames, unparsed_lines
 

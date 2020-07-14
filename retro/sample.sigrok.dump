@@ -1,0 +1,699 @@
+3257723-3257793 I²C: Address/Data: Address write: 08
+3257709-3257709 I²C: Address/Data: Start
+3257793-3257803 I²C: Address/Data: Write
+3257803-3257813 I²C: Address/Data: ACK
+3257818-3257898 I²C: Address/Data: Data write: 20
+3257898-3257908 I²C: Address/Data: ACK
+3258071-3258148 I²C: Address/Data: Data write: 0B
+3258148-3258158 I²C: Address/Data: ACK
+3258278-3258356 I²C: Address/Data: Data write: 00
+3258356-3258366 I²C: Address/Data: ACK
+3258484-3258562 I²C: Address/Data: Data write: 02
+3258562-3258572 I²C: Address/Data: ACK
+3258691-3258769 I²C: Address/Data: Data write: 04
+3258769-3258779 I²C: Address/Data: ACK
+3258898-3258975 I²C: Address/Data: Data write: 05
+3258975-3258985 I²C: Address/Data: ACK
+3259104-3259182 I²C: Address/Data: Data write: 06
+3259182-3259192 I²C: Address/Data: ACK
+3259311-3259389 I²C: Address/Data: Data write: 07
+3259389-3259399 I²C: Address/Data: ACK
+3259517-3259595 I²C: Address/Data: Data write: 08
+3259595-3259605 I²C: Address/Data: ACK
+3259728-3259806 I²C: Address/Data: Data write: 31
+3259806-3259816 I²C: Address/Data: ACK
+3260502-3260502 I²C: Address/Data: Stop
+3460708-3460708 I²C: Address/Data: Start
+3460722-3460792 I²C: Address/Data: Address write: 08
+3460792-3460802 I²C: Address/Data: Write
+3460802-3460812 I²C: Address/Data: ACK
+3460817-3460897 I²C: Address/Data: Data write: 20
+3460897-3460907 I²C: Address/Data: ACK
+3461069-3461147 I²C: Address/Data: Data write: 07
+3461147-3461157 I²C: Address/Data: ACK
+3461276-3461354 I²C: Address/Data: Data write: 06
+3461354-3461364 I²C: Address/Data: ACK
+3461483-3461561 I²C: Address/Data: Data write: 00
+3461561-3461571 I²C: Address/Data: ACK
+3461690-3461767 I²C: Address/Data: Data write: 00
+3461767-3461777 I²C: Address/Data: ACK
+3461896-3461974 I²C: Address/Data: Data write: 31
+3461974-3461984 I²C: Address/Data: ACK
+3462153-3462153 I²C: Address/Data: Stop
+3662358-3662358 I²C: Address/Data: Start
+3662373-3662443 I²C: Address/Data: Address write: 08
+3662443-3662453 I²C: Address/Data: Write
+3662453-3662463 I²C: Address/Data: ACK
+3662468-3662548 I²C: Address/Data: Data write: 20
+3662548-3662558 I²C: Address/Data: ACK
+3662720-3662798 I²C: Address/Data: Data write: 07
+3662798-3662808 I²C: Address/Data: ACK
+3662927-3663005 I²C: Address/Data: Data write: 06
+3663005-3663015 I²C: Address/Data: ACK
+3663134-3663213 I²C: Address/Data: Data write: 00
+3663212-3663223 I²C: Address/Data: ACK
+3663340-3663418 I²C: Address/Data: Data write: 01
+3663418-3663428 I²C: Address/Data: ACK
+3663547-3663625 I²C: Address/Data: Data write: 30
+3663625-3663635 I²C: Address/Data: ACK
+3663805-3663805 I²C: Address/Data: Stop
+3864005-3864005 I²C: Address/Data: Start
+3864019-3864089 I²C: Address/Data: Address write: 08
+3864089-3864099 I²C: Address/Data: Write
+3864099-3864109 I²C: Address/Data: ACK
+3864114-3864194 I²C: Address/Data: Data write: 20
+3864194-3864204 I²C: Address/Data: ACK
+3864367-3864444 I²C: Address/Data: Data write: 07
+3864444-3864454 I²C: Address/Data: ACK
+3864574-3864651 I²C: Address/Data: Data write: 06
+3864651-3864661 I²C: Address/Data: ACK
+3864780-3864858 I²C: Address/Data: Data write: 00
+3864858-3864868 I²C: Address/Data: ACK
+3864987-3865064 I²C: Address/Data: Data write: 01
+3865064-3865074 I²C: Address/Data: ACK
+3865194-3865272 I²C: Address/Data: Data write: 30
+3865272-3865282 I²C: Address/Data: ACK
+3865451-3865451 I²C: Address/Data: Stop
+4065651-4065651 I²C: Address/Data: Start
+4065665-4065735 I²C: Address/Data: Address write: 08
+4065735-4065745 I²C: Address/Data: Write
+4065745-4065755 I²C: Address/Data: ACK
+4065760-4065841 I²C: Address/Data: Data write: 20
+4065841-4065851 I²C: Address/Data: ACK
+4066014-4066091 I²C: Address/Data: Data write: 07
+4066091-4066101 I²C: Address/Data: ACK
+4066220-4066298 I²C: Address/Data: Data write: 06
+4066298-4066308 I²C: Address/Data: ACK
+4066427-4066505 I²C: Address/Data: Data write: 00
+4066505-4066515 I²C: Address/Data: ACK
+4066633-4066711 I²C: Address/Data: Data write: 00
+4066711-4066721 I²C: Address/Data: ACK
+4066840-4066918 I²C: Address/Data: Data write: 31
+4066918-4066928 I²C: Address/Data: ACK
+4067097-4067097 I²C: Address/Data: Stop
+4267302-4267302 I²C: Address/Data: Start
+4267317-4267387 I²C: Address/Data: Address write: 08
+4267387-4267397 I²C: Address/Data: Write
+4267397-4267407 I²C: Address/Data: ACK
+4267412-4267492 I²C: Address/Data: Data write: 20
+4267492-4267502 I²C: Address/Data: ACK
+4267665-4267743 I²C: Address/Data: Data write: 07
+4267743-4267753 I²C: Address/Data: ACK
+4267872-4267950 I²C: Address/Data: Data write: 06
+4267950-4267960 I²C: Address/Data: ACK
+4268078-4268156 I²C: Address/Data: Data write: 00
+4268156-4268166 I²C: Address/Data: ACK
+4268286-4268363 I²C: Address/Data: Data write: 01
+4268363-4268373 I²C: Address/Data: ACK
+4268492-4268570 I²C: Address/Data: Data write: 30
+4268570-4268580 I²C: Address/Data: ACK
+4268749-4268749 I²C: Address/Data: Stop
+4468950-4468950 I²C: Address/Data: Start
+4468964-4469034 I²C: Address/Data: Address write: 08
+4469034-4469044 I²C: Address/Data: Write
+4469044-4469054 I²C: Address/Data: ACK
+4469059-4469139 I²C: Address/Data: Data write: 20
+4469139-4469149 I²C: Address/Data: ACK
+4469312-4469389 I²C: Address/Data: Data write: 07
+4469389-4469399 I²C: Address/Data: ACK
+4469518-4469596 I²C: Address/Data: Data write: 06
+4469596-4469606 I²C: Address/Data: ACK
+4469725-4469803 I²C: Address/Data: Data write: 00
+4469803-4469813 I²C: Address/Data: ACK
+4469932-4470009 I²C: Address/Data: Data write: 00
+4470009-4470019 I²C: Address/Data: ACK
+4470138-4470216 I²C: Address/Data: Data write: 31
+4470216-4470226 I²C: Address/Data: ACK
+4470395-4470395 I²C: Address/Data: Stop
+4670605-4670605 I²C: Address/Data: Start
+4670619-4670689 I²C: Address/Data: Address write: 08
+4670689-4670699 I²C: Address/Data: Write
+4670699-4670709 I²C: Address/Data: ACK
+4670714-4670794 I²C: Address/Data: Data write: 20
+4670794-4670804 I²C: Address/Data: ACK
+4670967-4671045 I²C: Address/Data: Data write: 08
+4671045-4671055 I²C: Address/Data: ACK
+4671174-4671251 I²C: Address/Data: Data write: 05
+4671251-4671261 I²C: Address/Data: ACK
+4671380-4671458 I²C: Address/Data: Data write: 00
+4671458-4671468 I²C: Address/Data: ACK
+4671587-4671665 I²C: Address/Data: Data write: 11
+4671665-4671675 I²C: Address/Data: ACK
+4671839-4671917 I²C: Address/Data: Data write: DE
+4671917-4671927 I²C: Address/Data: ACK
+4672091-4672169 I²C: Address/Data: Data write: F2
+4672169-4672179 I²C: Address/Data: ACK
+4672348-4672348 I²C: Address/Data: Stop
+4872554-4872554 I²C: Address/Data: Start
+4872568-4872638 I²C: Address/Data: Address write: 08
+4872638-4872648 I²C: Address/Data: Write
+4872648-4872658 I²C: Address/Data: ACK
+4872663-4872743 I²C: Address/Data: Data write: 20
+4872743-4872753 I²C: Address/Data: ACK
+4872915-4872993 I²C: Address/Data: Data write: 08
+4872993-4873003 I²C: Address/Data: ACK
+4873122-4873200 I²C: Address/Data: Data write: 05
+4873200-4873210 I²C: Address/Data: ACK
+4873329-4873407 I²C: Address/Data: Data write: 00
+4873407-4873417 I²C: Address/Data: ACK
+4873535-4873613 I²C: Address/Data: Data write: 11
+4873613-4873623 I²C: Address/Data: ACK
+4873788-4873865 I²C: Address/Data: Data write: DE
+4873865-4873875 I²C: Address/Data: ACK
+4874040-4874117 I²C: Address/Data: Data write: F2
+4874117-4874127 I²C: Address/Data: ACK
+4874297-4874297 I²C: Address/Data: Stop
+5074507-5074507 I²C: Address/Data: Start
+5074522-5074592 I²C: Address/Data: Address write: 08
+5074592-5074602 I²C: Address/Data: Write
+5074602-5074612 I²C: Address/Data: ACK
+5074617-5074697 I²C: Address/Data: Data write: 20
+5074697-5074707 I²C: Address/Data: ACK
+5074869-5074947 I²C: Address/Data: Data write: 08
+5074947-5074957 I²C: Address/Data: ACK
+5075076-5075154 I²C: Address/Data: Data write: 05
+5075154-5075164 I²C: Address/Data: ACK
+5075282-5075360 I²C: Address/Data: Data write: 00
+5075360-5075370 I²C: Address/Data: ACK
+5075489-5075567 I²C: Address/Data: Data write: 11
+5075567-5075577 I²C: Address/Data: ACK
+5075740-5075818 I²C: Address/Data: Data write: DE
+5075818-5075828 I²C: Address/Data: ACK
+5075992-5076070 I²C: Address/Data: Data write: F2
+5076070-5076080 I²C: Address/Data: ACK
+5076250-5076250 I²C: Address/Data: Stop
+5276455-5276455 I²C: Address/Data: Start
+5276469-5276539 I²C: Address/Data: Address write: 08
+5276539-5276549 I²C: Address/Data: Write
+5276549-5276559 I²C: Address/Data: ACK
+5276564-5276644 I²C: Address/Data: Data write: 20
+5276644-5276654 I²C: Address/Data: ACK
+5276817-5276895 I²C: Address/Data: Data write: 08
+5276895-5276905 I²C: Address/Data: ACK
+5277024-5277102 I²C: Address/Data: Data write: 05
+5277102-5277112 I²C: Address/Data: ACK
+5277231-5277309 I²C: Address/Data: Data write: 00
+5277309-5277319 I²C: Address/Data: ACK
+5277438-5277515 I²C: Address/Data: Data write: 11
+5277515-5277525 I²C: Address/Data: ACK
+5277689-5277767 I²C: Address/Data: Data write: DE
+5277767-5277777 I²C: Address/Data: ACK
+5277941-5278019 I²C: Address/Data: Data write: F2
+5278019-5278029 I²C: Address/Data: ACK
+5278199-5278199 I²C: Address/Data: Stop
+5478419-5478419 I²C: Address/Data: Start
+5478433-5478503 I²C: Address/Data: Address write: 08
+5478503-5478513 I²C: Address/Data: Write
+5478513-5478523 I²C: Address/Data: ACK
+5478528-5478608 I²C: Address/Data: Data write: 20
+5478608-5478618 I²C: Address/Data: ACK
+5478781-5478858 I²C: Address/Data: Data write: 0B
+5478858-5478868 I²C: Address/Data: ACK
+5478987-5479065 I²C: Address/Data: Data write: 00
+5479065-5479075 I²C: Address/Data: ACK
+5479195-5479272 I²C: Address/Data: Data write: 02
+5479272-5479282 I²C: Address/Data: ACK
+5479401-5479479 I²C: Address/Data: Data write: 04
+5479479-5479489 I²C: Address/Data: ACK
+5479608-5479685 I²C: Address/Data: Data write: 05
+5479685-5479695 I²C: Address/Data: ACK
+5479814-5479892 I²C: Address/Data: Data write: 06
+5479892-5479902 I²C: Address/Data: ACK
+5480021-5480099 I²C: Address/Data: Data write: 07
+5480099-5480109 I²C: Address/Data: ACK
+5480228-5480305 I²C: Address/Data: Data write: 08
+5480305-5480315 I²C: Address/Data: ACK
+5480439-5480516 I²C: Address/Data: Data write: 31
+5480516-5480526 I²C: Address/Data: ACK
+5481213-5481213 I²C: Address/Data: Stop
+5681418-5681418 I²C: Address/Data: Start
+5681432-5681502 I²C: Address/Data: Address write: 08
+5681502-5681512 I²C: Address/Data: Write
+5681512-5681522 I²C: Address/Data: ACK
+5681527-5681607 I²C: Address/Data: Data write: 20
+5681607-5681617 I²C: Address/Data: ACK
+5681780-5681857 I²C: Address/Data: Data write: 08
+5681857-5681867 I²C: Address/Data: ACK
+5681987-5682065 I²C: Address/Data: Data write: 05
+5682065-5682075 I²C: Address/Data: ACK
+5682194-5682271 I²C: Address/Data: Data write: 00
+5682271-5682281 I²C: Address/Data: ACK
+5682400-5682478 I²C: Address/Data: Data write: 11
+5682478-5682488 I²C: Address/Data: ACK
+5682652-5682730 I²C: Address/Data: Data write: DE
+5682730-5682740 I²C: Address/Data: ACK
+5682904-5682982 I²C: Address/Data: Data write: F2
+5682982-5682992 I²C: Address/Data: ACK
+5683162-5683162 I²C: Address/Data: Stop
+5883377-5883377 I²C: Address/Data: Start
+5883391-5883461 I²C: Address/Data: Address write: 08
+5883461-5883471 I²C: Address/Data: Write
+5883471-5883481 I²C: Address/Data: ACK
+5883486-5883566 I²C: Address/Data: Data write: 20
+5883566-5883576 I²C: Address/Data: ACK
+5883740-5883817 I²C: Address/Data: Data write: 08
+5883818-5883828 I²C: Address/Data: ACK
+5883946-5884024 I²C: Address/Data: Data write: 05
+5884024-5884034 I²C: Address/Data: ACK
+5884153-5884231 I²C: Address/Data: Data write: 00
+5884231-5884241 I²C: Address/Data: ACK
+5884360-5884437 I²C: Address/Data: Data write: 11
+5884437-5884447 I²C: Address/Data: ACK
+5884611-5884689 I²C: Address/Data: Data write: DE
+5884689-5884699 I²C: Address/Data: ACK
+5884863-5884941 I²C: Address/Data: Data write: F2
+5884941-5884951 I²C: Address/Data: ACK
+5885121-5885121 I²C: Address/Data: Stop
+6085336-6085336 I²C: Address/Data: Start
+6085350-6085420 I²C: Address/Data: Address write: 08
+6085420-6085430 I²C: Address/Data: Write
+6085430-6085440 I²C: Address/Data: ACK
+6085445-6085525 I²C: Address/Data: Data write: 20
+6085525-6085535 I²C: Address/Data: ACK
+6085698-6085777 I²C: Address/Data: Data write: 08
+6085776-6085787 I²C: Address/Data: ACK
+6085904-6085982 I²C: Address/Data: Data write: 05
+6085982-6085992 I²C: Address/Data: ACK
+6086111-6086189 I²C: Address/Data: Data write: 00
+6086189-6086199 I²C: Address/Data: ACK
+6086317-6086395 I²C: Address/Data: Data write: 12
+6086395-6086405 I²C: Address/Data: ACK
+6086569-6086647 I²C: Address/Data: Data write: 09
+6086647-6086657 I²C: Address/Data: ACK
+6086776-6086853 I²C: Address/Data: Data write: 26
+6086853-6086863 I²C: Address/Data: ACK
+6087032-6087032 I²C: Address/Data: Stop
+6287243-6287243 I²C: Address/Data: Start
+6287257-6287327 I²C: Address/Data: Address write: 08
+6287327-6287337 I²C: Address/Data: Write
+6287337-6287347 I²C: Address/Data: ACK
+6287352-6287432 I²C: Address/Data: Data write: 20
+6287432-6287442 I²C: Address/Data: ACK
+6287605-6287683 I²C: Address/Data: Data write: 07
+6287683-6287693 I²C: Address/Data: ACK
+6287812-6287889 I²C: Address/Data: Data write: 06
+6287889-6287899 I²C: Address/Data: ACK
+6288018-6288096 I²C: Address/Data: Data write: 00
+6288096-6288106 I²C: Address/Data: ACK
+6288226-6288303 I²C: Address/Data: Data write: 01
+6288303-6288313 I²C: Address/Data: ACK
+6288432-6288510 I²C: Address/Data: Data write: 30
+6288510-6288520 I²C: Address/Data: ACK
+6288689-6288689 I²C: Address/Data: Stop
+6488890-6488890 I²C: Address/Data: Start
+6488904-6488974 I²C: Address/Data: Address write: 08
+6488974-6488984 I²C: Address/Data: Write
+6488984-6488994 I²C: Address/Data: ACK
+6488999-6489079 I²C: Address/Data: Data write: 20
+6489079-6489089 I²C: Address/Data: ACK
+6489252-6489329 I²C: Address/Data: Data write: 07
+6489329-6489339 I²C: Address/Data: ACK
+6489458-6489536 I²C: Address/Data: Data write: 06
+6489536-6489546 I²C: Address/Data: ACK
+6489665-6489743 I²C: Address/Data: Data write: 00
+6489743-6489753 I²C: Address/Data: ACK
+6489872-6489949 I²C: Address/Data: Data write: 01
+6489949-6489959 I²C: Address/Data: ACK
+6490078-6490156 I²C: Address/Data: Data write: 30
+6490156-6490166 I²C: Address/Data: ACK
+6490335-6490335 I²C: Address/Data: Stop
+6490380-6490380 I²C: Address/Data: Start
+6490394-6490464 I²C: Address/Data: Address write: 08
+6490464-6490474 I²C: Address/Data: Write
+6490474-6490484 I²C: Address/Data: ACK
+6490489-6490569 I²C: Address/Data: Data write: 20
+6490569-6490579 I²C: Address/Data: ACK
+6490743-6490821 I²C: Address/Data: Data write: 08
+6490821-6490831 I²C: Address/Data: ACK
+6490950-6491027 I²C: Address/Data: Data write: 05
+6491027-6491037 I²C: Address/Data: ACK
+6491160-6491238 I²C: Address/Data: Data write: 00
+6491238-6491248 I²C: Address/Data: ACK
+6491844-6491922 I²C: Address/Data: Data write: 11
+6491922-6491932 I²C: Address/Data: ACK
+6492695-6492773 I²C: Address/Data: Data write: DE
+6492773-6492783 I²C: Address/Data: ACK
+6493545-6493623 I²C: Address/Data: Data write: F2
+6493623-6493633 I²C: Address/Data: ACK
+6494401-6494401 I²C: Address/Data: Stop
+6694621-6694621 I²C: Address/Data: Start
+6694635-6694705 I²C: Address/Data: Address write: 08
+6694705-6694715 I²C: Address/Data: Write
+6694715-6694725 I²C: Address/Data: ACK
+6694730-6694811 I²C: Address/Data: Data write: 20
+6694811-6694821 I²C: Address/Data: ACK
+6694983-6695061 I²C: Address/Data: Data write: 08
+6695061-6695071 I²C: Address/Data: ACK
+6695190-6695267 I²C: Address/Data: Data write: 05
+6695267-6695277 I²C: Address/Data: ACK
+6695396-6695474 I²C: Address/Data: Data write: 00
+6695474-6695484 I²C: Address/Data: ACK
+6695603-6695681 I²C: Address/Data: Data write: 11
+6695681-6695691 I²C: Address/Data: ACK
+6695854-6695932 I²C: Address/Data: Data write: DE
+6695932-6695942 I²C: Address/Data: ACK
+6696106-6696184 I²C: Address/Data: Data write: F2
+6696184-6696194 I²C: Address/Data: ACK
+6696364-6696364 I²C: Address/Data: Stop
+6896574-6896574 I²C: Address/Data: Start
+6896588-6896658 I²C: Address/Data: Address write: 08
+6896658-6896668 I²C: Address/Data: Write
+6896668-6896678 I²C: Address/Data: ACK
+6896683-6896763 I²C: Address/Data: Data write: 20
+6896763-6896773 I²C: Address/Data: ACK
+6896936-6897014 I²C: Address/Data: Data write: 08
+6897014-6897024 I²C: Address/Data: ACK
+6897142-6897220 I²C: Address/Data: Data write: 05
+6897220-6897230 I²C: Address/Data: ACK
+6897349-6897427 I²C: Address/Data: Data write: 00
+6897427-6897437 I²C: Address/Data: ACK
+6897556-6897634 I²C: Address/Data: Data write: 11
+6897634-6897644 I²C: Address/Data: ACK
+6897807-6897885 I²C: Address/Data: Data write: DE
+6897885-6897895 I²C: Address/Data: ACK
+6898059-6898137 I²C: Address/Data: Data write: F2
+6898137-6898147 I²C: Address/Data: ACK
+6898317-6898317 I²C: Address/Data: Stop
+7098522-7098522 I²C: Address/Data: Start
+7098536-7098606 I²C: Address/Data: Address write: 08
+7098606-7098616 I²C: Address/Data: Write
+7098616-7098626 I²C: Address/Data: ACK
+7098631-7098711 I²C: Address/Data: Data write: 20
+7098711-7098721 I²C: Address/Data: ACK
+7098884-7098961 I²C: Address/Data: Data write: 08
+7098961-7098971 I²C: Address/Data: ACK
+7099090-7099168 I²C: Address/Data: Data write: 05
+7099168-7099178 I²C: Address/Data: ACK
+7099297-7099375 I²C: Address/Data: Data write: 00
+7099375-7099385 I²C: Address/Data: ACK
+7099504-7099582 I²C: Address/Data: Data write: 11
+7099582-7099592 I²C: Address/Data: ACK
+7099755-7099833 I²C: Address/Data: Data write: DE
+7099833-7099843 I²C: Address/Data: ACK
+7100008-7100085 I²C: Address/Data: Data write: F2
+7100085-7100095 I²C: Address/Data: ACK
+7100265-7100265 I²C: Address/Data: Stop
+7300475-7300475 I²C: Address/Data: Start
+7300489-7300560 I²C: Address/Data: Address write: 08
+7300560-7300570 I²C: Address/Data: Write
+7300570-7300580 I²C: Address/Data: ACK
+7300585-7300665 I²C: Address/Data: Data write: 20
+7300665-7300675 I²C: Address/Data: ACK
+7300837-7300915 I²C: Address/Data: Data write: 08
+7300915-7300925 I²C: Address/Data: ACK
+7301044-7301122 I²C: Address/Data: Data write: 05
+7301122-7301132 I²C: Address/Data: ACK
+7301250-7301328 I²C: Address/Data: Data write: 00
+7301328-7301338 I²C: Address/Data: ACK
+7301457-7301535 I²C: Address/Data: Data write: 11
+7301535-7301545 I²C: Address/Data: ACK
+7301708-7301786 I²C: Address/Data: Data write: DE
+7301786-7301796 I²C: Address/Data: ACK
+7301960-7302038 I²C: Address/Data: Data write: F2
+7302038-7302048 I²C: Address/Data: ACK
+7302218-7302218 I²C: Address/Data: Stop
+7502428-7502428 I²C: Address/Data: Start
+7502442-7502513 I²C: Address/Data: Address write: 08
+7502513-7502523 I²C: Address/Data: Write
+7502523-7502533 I²C: Address/Data: ACK
+7502537-7502618 I²C: Address/Data: Data write: 20
+7502618-7502628 I²C: Address/Data: ACK
+7502790-7502868 I²C: Address/Data: Data write: 08
+7502868-7502878 I²C: Address/Data: ACK
+7502997-7503074 I²C: Address/Data: Data write: 05
+7503074-7503084 I²C: Address/Data: ACK
+7503203-7503281 I²C: Address/Data: Data write: 00
+7503281-7503291 I²C: Address/Data: ACK
+7503410-7503488 I²C: Address/Data: Data write: 11
+7503488-7503498 I²C: Address/Data: ACK
+7503661-7503739 I²C: Address/Data: Data write: DE
+7503739-7503749 I²C: Address/Data: ACK
+7503913-7503991 I²C: Address/Data: Data write: F2
+7503991-7504001 I²C: Address/Data: ACK
+7504171-7504171 I²C: Address/Data: Stop
+7704386-7704386 I²C: Address/Data: Start
+7704400-7704470 I²C: Address/Data: Address write: 08
+7704470-7704480 I²C: Address/Data: Write
+7704480-7704490 I²C: Address/Data: ACK
+7704495-7704575 I²C: Address/Data: Data write: 20
+7704575-7704585 I²C: Address/Data: ACK
+7704748-7704826 I²C: Address/Data: Data write: 08
+7704826-7704836 I²C: Address/Data: ACK
+7704954-7705032 I²C: Address/Data: Data write: 05
+7705032-7705042 I²C: Address/Data: ACK
+7705161-7705239 I²C: Address/Data: Data write: 00
+7705239-7705249 I²C: Address/Data: ACK
+7705368-7705445 I²C: Address/Data: Data write: 11
+7705446-7705456 I²C: Address/Data: ACK
+7705619-7705697 I²C: Address/Data: Data write: DE
+7705697-7705707 I²C: Address/Data: ACK
+7705871-7705949 I²C: Address/Data: Data write: F2
+7705949-7705959 I²C: Address/Data: ACK
+7706129-7706129 I²C: Address/Data: Stop
+7906349-7906349 I²C: Address/Data: Start
+7906363-7906433 I²C: Address/Data: Address write: 08
+7906433-7906443 I²C: Address/Data: Write
+7906443-7906453 I²C: Address/Data: ACK
+7906458-7906538 I²C: Address/Data: Data write: 20
+7906538-7906548 I²C: Address/Data: ACK
+7906711-7906789 I²C: Address/Data: Data write: 08
+7906789-7906799 I²C: Address/Data: ACK
+7906917-7906995 I²C: Address/Data: Data write: 05
+7906995-7907005 I²C: Address/Data: ACK
+7907124-7907202 I²C: Address/Data: Data write: 00
+7907202-7907212 I²C: Address/Data: ACK
+7907331-7907409 I²C: Address/Data: Data write: 11
+7907409-7907419 I²C: Address/Data: ACK
+7907582-7907660 I²C: Address/Data: Data write: DE
+7907660-7907670 I²C: Address/Data: ACK
+7907835-7907913 I²C: Address/Data: Data write: F2
+7907913-7907923 I²C: Address/Data: ACK
+7908093-7908093 I²C: Address/Data: Stop
+8108308-8108308 I²C: Address/Data: Start
+8108322-8108392 I²C: Address/Data: Address write: 08
+8108392-8108402 I²C: Address/Data: Write
+8108402-8108412 I²C: Address/Data: ACK
+8108417-8108497 I²C: Address/Data: Data write: 20
+8108497-8108507 I²C: Address/Data: ACK
+8108670-8108748 I²C: Address/Data: Data write: 08
+8108748-8108758 I²C: Address/Data: ACK
+8108876-8108954 I²C: Address/Data: Data write: 05
+8108954-8108964 I²C: Address/Data: ACK
+8109083-8109161 I²C: Address/Data: Data write: 00
+8109161-8109171 I²C: Address/Data: ACK
+8109290-8109367 I²C: Address/Data: Data write: 11
+8109367-8109377 I²C: Address/Data: ACK
+8109541-8109619 I²C: Address/Data: Data write: DE
+8109619-8109629 I²C: Address/Data: ACK
+8109793-8109871 I²C: Address/Data: Data write: F2
+8109871-8109881 I²C: Address/Data: ACK
+8110050-8110050 I²C: Address/Data: Stop
+8310256-8310256 I²C: Address/Data: Start
+8310270-8310340 I²C: Address/Data: Address write: 08
+8310340-8310350 I²C: Address/Data: Write
+8310350-8310360 I²C: Address/Data: ACK
+8310365-8310445 I²C: Address/Data: Data write: 20
+8310445-8310455 I²C: Address/Data: ACK
+8310617-8310695 I²C: Address/Data: Data write: 08
+8310695-8310705 I²C: Address/Data: ACK
+8310824-8310902 I²C: Address/Data: Data write: 05
+8310902-8310912 I²C: Address/Data: ACK
+8311031-8311110 I²C: Address/Data: Data write: 00
+8311109-8311120 I²C: Address/Data: ACK
+8311237-8311315 I²C: Address/Data: Data write: 11
+8311315-8311325 I²C: Address/Data: ACK
+8311489-8311566 I²C: Address/Data: Data write: DE
+8311566-8311576 I²C: Address/Data: ACK
+8311741-8311819 I²C: Address/Data: Data write: F2
+8311819-8311829 I²C: Address/Data: ACK
+8311998-8311998 I²C: Address/Data: Stop
+8512204-8512204 I²C: Address/Data: Start
+8512218-8512288 I²C: Address/Data: Address write: 08
+8512288-8512298 I²C: Address/Data: Write
+8512298-8512308 I²C: Address/Data: ACK
+8512313-8512393 I²C: Address/Data: Data write: 20
+8512393-8512403 I²C: Address/Data: ACK
+8512566-8512644 I²C: Address/Data: Data write: 08
+8512644-8512654 I²C: Address/Data: ACK
+8512772-8512850 I²C: Address/Data: Data write: 05
+8512850-8512860 I²C: Address/Data: ACK
+8512979-8513057 I²C: Address/Data: Data write: 00
+8513057-8513067 I²C: Address/Data: ACK
+8513186-8513264 I²C: Address/Data: Data write: 11
+8513264-8513274 I²C: Address/Data: ACK
+8513438-8513516 I²C: Address/Data: Data write: DE
+8513516-8513526 I²C: Address/Data: ACK
+8513690-8513768 I²C: Address/Data: Data write: F2
+8513768-8513778 I²C: Address/Data: ACK
+8513947-8513947 I²C: Address/Data: Stop
+8714153-8714153 I²C: Address/Data: Start
+8714167-8714237 I²C: Address/Data: Address write: 08
+8714237-8714247 I²C: Address/Data: Write
+8714247-8714257 I²C: Address/Data: ACK
+8714262-8714342 I²C: Address/Data: Data write: 20
+8714342-8714352 I²C: Address/Data: ACK
+8714514-8714592 I²C: Address/Data: Data write: 08
+8714592-8714602 I²C: Address/Data: ACK
+8714721-8714799 I²C: Address/Data: Data write: 05
+8714799-8714809 I²C: Address/Data: ACK
+8714928-8715005 I²C: Address/Data: Data write: 00
+8715005-8715015 I²C: Address/Data: ACK
+8715135-8715213 I²C: Address/Data: Data write: 11
+8715213-8715223 I²C: Address/Data: ACK
+8715386-8715464 I²C: Address/Data: Data write: DE
+8715464-8715474 I²C: Address/Data: ACK
+8715638-8715716 I²C: Address/Data: Data write: F2
+8715716-8715726 I²C: Address/Data: ACK
+8715896-8715896 I²C: Address/Data: Stop
+8916106-8916106 I²C: Address/Data: Start
+8916120-8916191 I²C: Address/Data: Address write: 08
+8916191-8916201 I²C: Address/Data: Write
+8916201-8916211 I²C: Address/Data: ACK
+8916216-8916296 I²C: Address/Data: Data write: 20
+8916296-8916306 I²C: Address/Data: ACK
+8916468-8916546 I²C: Address/Data: Data write: 08
+8916546-8916556 I²C: Address/Data: ACK
+8916675-8916753 I²C: Address/Data: Data write: 05
+8916753-8916763 I²C: Address/Data: ACK
+8916881-8916959 I²C: Address/Data: Data write: 00
+8916959-8916969 I²C: Address/Data: ACK
+8917088-8917166 I²C: Address/Data: Data write: 11
+8917166-8917176 I²C: Address/Data: ACK
+8917339-8917417 I²C: Address/Data: Data write: DE
+8917417-8917427 I²C: Address/Data: ACK
+8917591-8917669 I²C: Address/Data: Data write: F2
+8917669-8917679 I²C: Address/Data: ACK
+8917849-8917849 I²C: Address/Data: Stop
+9118055-9118055 I²C: Address/Data: Start
+9118069-9118139 I²C: Address/Data: Address write: 08
+9118139-9118149 I²C: Address/Data: Write
+9118149-9118159 I²C: Address/Data: ACK
+9118164-9118244 I²C: Address/Data: Data write: 20
+9118244-9118254 I²C: Address/Data: ACK
+9118416-9118494 I²C: Address/Data: Data write: 08
+9118494-9118504 I²C: Address/Data: ACK
+9118623-9118701 I²C: Address/Data: Data write: 05
+9118701-9118711 I²C: Address/Data: ACK
+9118830-9118907 I²C: Address/Data: Data write: 00
+9118907-9118917 I²C: Address/Data: ACK
+9119036-9119114 I²C: Address/Data: Data write: 11
+9119114-9119124 I²C: Address/Data: ACK
+9119288-9119365 I²C: Address/Data: Data write: DE
+9119365-9119375 I²C: Address/Data: ACK
+9119540-9119617 I²C: Address/Data: Data write: F2
+9119617-9119627 I²C: Address/Data: ACK
+9119797-9119797 I²C: Address/Data: Stop
+9320003-9320003 I²C: Address/Data: Start
+9320017-9320087 I²C: Address/Data: Address write: 08
+9320087-9320097 I²C: Address/Data: Write
+9320097-9320107 I²C: Address/Data: ACK
+9320112-9320192 I²C: Address/Data: Data write: 20
+9320192-9320202 I²C: Address/Data: ACK
+9320364-9320442 I²C: Address/Data: Data write: 08
+9320442-9320452 I²C: Address/Data: ACK
+9320571-9320649 I²C: Address/Data: Data write: 05
+9320649-9320659 I²C: Address/Data: ACK
+9320778-9320856 I²C: Address/Data: Data write: 00
+9320856-9320866 I²C: Address/Data: ACK
+9320984-9321062 I²C: Address/Data: Data write: 11
+9321062-9321072 I²C: Address/Data: ACK
+9321236-9321314 I²C: Address/Data: Data write: DE
+9321314-9321324 I²C: Address/Data: ACK
+9321488-9321566 I²C: Address/Data: Data write: F2
+9321566-9321576 I²C: Address/Data: ACK
+9321745-9321745 I²C: Address/Data: Stop
+9521956-9521956 I²C: Address/Data: Start
+9521970-9522040 I²C: Address/Data: Address write: 08
+9522040-9522050 I²C: Address/Data: Write
+9522050-9522060 I²C: Address/Data: ACK
+9522065-9522145 I²C: Address/Data: Data write: 20
+9522145-9522155 I²C: Address/Data: ACK
+9522318-9522396 I²C: Address/Data: Data write: 08
+9522396-9522406 I²C: Address/Data: ACK
+9522525-9522602 I²C: Address/Data: Data write: 05
+9522602-9522612 I²C: Address/Data: ACK
+9522731-9522809 I²C: Address/Data: Data write: 00
+9522809-9522819 I²C: Address/Data: ACK
+9522939-9523016 I²C: Address/Data: Data write: 11
+9523016-9523026 I²C: Address/Data: ACK
+9523190-9523268 I²C: Address/Data: Data write: DE
+9523268-9523278 I²C: Address/Data: ACK
+9523442-9523520 I²C: Address/Data: Data write: F2
+9523520-9523530 I²C: Address/Data: ACK
+9523700-9523700 I²C: Address/Data: Stop
+9723910-9723910 I²C: Address/Data: Start
+9723924-9723994 I²C: Address/Data: Address write: 08
+9723994-9724004 I²C: Address/Data: Write
+9724004-9724014 I²C: Address/Data: ACK
+9724019-9724099 I²C: Address/Data: Data write: 20
+9724099-9724109 I²C: Address/Data: ACK
+9724272-9724349 I²C: Address/Data: Data write: 08
+9724349-9724359 I²C: Address/Data: ACK
+9724478-9724556 I²C: Address/Data: Data write: 05
+9724556-9724566 I²C: Address/Data: ACK
+9724685-9724763 I²C: Address/Data: Data write: 00
+9724763-9724773 I²C: Address/Data: ACK
+9724891-9724969 I²C: Address/Data: Data write: 11
+9724969-9724979 I²C: Address/Data: ACK
+9725143-9725220 I²C: Address/Data: Data write: DE
+9725220-9725230 I²C: Address/Data: ACK
+9725395-9725473 I²C: Address/Data: Data write: F2
+9725473-9725483 I²C: Address/Data: ACK
+9725652-9725652 I²C: Address/Data: Stop
+9925858-9925858 I²C: Address/Data: Start
+9925872-9925942 I²C: Address/Data: Address write: 08
+9925942-9925952 I²C: Address/Data: Write
+9925952-9925962 I²C: Address/Data: ACK
+9925967-9926047 I²C: Address/Data: Data write: 20
+9926047-9926057 I²C: Address/Data: ACK
+9926220-9926297 I²C: Address/Data: Data write: 08
+9926297-9926307 I²C: Address/Data: ACK
+9926426-9926504 I²C: Address/Data: Data write: 05
+9926504-9926514 I²C: Address/Data: ACK
+9926633-9926711 I²C: Address/Data: Data write: 00
+9926711-9926721 I²C: Address/Data: ACK
+9926839-9926917 I²C: Address/Data: Data write: 11
+9926917-9926927 I²C: Address/Data: ACK
+9927091-9927169 I²C: Address/Data: Data write: DE
+9927169-9927179 I²C: Address/Data: ACK
+9927343-9927421 I²C: Address/Data: Data write: F2
+9927421-9927431 I²C: Address/Data: ACK
+9927600-9927600 I²C: Address/Data: Stop
+10127806-10127806 I²C: Address/Data: Start
+10127820-10127890 I²C: Address/Data: Address write: 08
+10127890-10127900 I²C: Address/Data: Write
+10127900-10127910 I²C: Address/Data: ACK
+10127915-10127995 I²C: Address/Data: Data write: 20
+10127995-10128005 I²C: Address/Data: ACK
+10128168-10128246 I²C: Address/Data: Data write: 08
+10128246-10128256 I²C: Address/Data: ACK
+10128375-10128453 I²C: Address/Data: Data write: 05
+10128453-10128463 I²C: Address/Data: ACK
+10128581-10128659 I²C: Address/Data: Data write: 00
+10128659-10128669 I²C: Address/Data: ACK
+10128788-10128866 I²C: Address/Data: Data write: 11
+10128866-10128876 I²C: Address/Data: ACK
+10129039-10129117 I²C: Address/Data: Data write: DE
+10129117-10129127 I²C: Address/Data: ACK
+10129291-10129369 I²C: Address/Data: Data write: F2
+10129369-10129379 I²C: Address/Data: ACK
+10129549-10129549 I²C: Address/Data: Stop
+10329759-10329759 I²C: Address/Data: Start
+10329773-10329843 I²C: Address/Data: Address write: 08
+10329843-10329853 I²C: Address/Data: Write
+10329853-10329863 I²C: Address/Data: ACK
+10329868-10329948 I²C: Address/Data: Data write: 20
+10329948-10329958 I²C: Address/Data: ACK
+10330121-10330199 I²C: Address/Data: Data write: 08
+10330199-10330209 I²C: Address/Data: ACK
+10330328-10330405 I²C: Address/Data: Data write: 05
+10330405-10330415 I²C: Address/Data: ACK
+10330534-10330612 I²C: Address/Data: Data write: 00
+10330612-10330622 I²C: Address/Data: ACK
+10330741-10330819 I²C: Address/Data: Data write: 11
+10330819-10330829 I²C: Address/Data: ACK
+10330993-10331070 I²C: Address/Data: Data write: DE
+10331070-10331080 I²C: Address/Data: ACK
+10331245-10331322 I²C: Address/Data: Data write: F2
+10331322-10331332 I²C: Address/Data: ACK
+10331502-10331502 I²C: Address/Data: Stop
