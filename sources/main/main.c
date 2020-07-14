@@ -12,6 +12,8 @@
 #include "esp_system.h"
 #include "esp_spi_flash.h"
 #include "driver/i2c.h"
+#include "httpd.h"
+#include "globalvars.h"
 
 inline void chksum(uint8_t dest, uint8_t *payload, uint8_t pl_size) __attribute__((always_inline));
 
@@ -29,6 +31,8 @@ static const uint8_t i2c_lamp_address = 0x08;
 #define DELAY_HEARTBEAT 200     // 0.2s (between HB(0) and HB(1)
 #define PERIOD_AMBIANCE 1250     // 1.25s
 #define PERIOD_CONFIG 10000     // 10s
+
+// ======== GLOBALS =========
 
 static esp_err_t i2c_master_init(i2c_port_t i2c_port)
 {
@@ -76,10 +80,8 @@ static esp_err_t i2c_master_write_slave(uint8_t destination, uint8_t *payload, u
 
 void chksum(uint8_t dest, uint8_t *payload, uint8_t pl_size) {
     dest <<= 1;
-    printf("PL : %02x", dest);
     for (uint8_t i=0; i<pl_size-1; i++) {
         dest ^= payload[i];
-        printf("^%02x ==> %02x", payload[i], dest);
     }
     payload[pl_size-1] = dest;
 }
@@ -165,8 +167,34 @@ static void disp_buf(uint8_t *buf, int len)
     printf("\n");
 }
 
+
+void start_mdns_service()
+{
+    //initialize mDNS service
+    esp_err_t err = mdns_init();
+    if (err) {
+        printf("MDNS Init failed: %d\n", err);
+        return;
+    }
+
+    //set hostname
+    mdns_hostname_set(CONFIG_GENIUS_MDNS_HOSTNAME);
+    //set default instance
+    mdns_instance_name_set(CONFIG_GENIUS_MDNS_DESCRIPTION);
+
+    // prolly not necessary, doesn't eat much bread anywayz...
+    mdns_service_add(NULL, "_http", "_tcp", 80, NULL, 0);
+
+    printf("MDNS Init done...\n");
+}
+
+
+}
+
+
 void app_main(void)
 {
+    // ----------- On-boot greeter ------------------
     printf("Genie of the Lamp sayz: << Hello! >> and wavez a hand o/\n");
 
     /* Print chip information */
@@ -182,9 +210,27 @@ void app_main(void)
     printf("%dMB %s flash\n", spi_flash_get_chip_size() / (1024 * 1024),
             (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
     fflush(stdout);
+    // ================================================
 
+
+    // Start i²c
     ESP_ERROR_CHECK(i2c_master_init(i2c_port_master));
     ESP_ERROR_CHECK(i2c_slave_init(i2c_port_slave));
+
+    // start network and connect
+    tcpip_adapter_init();
+    ESP_ERROR_CHECK(esp_event_loop_create_default());
+
+    /* This helper function configures Wi-Fi or Ethernet, as selected in menuconfig.
+     * Read "Establishing Wi-Fi or Ethernet Connection" section in
+     * examples/protocols/README.md for more information about this function.
+     */
+    ESP_ERROR_CHECK(genius_connect());
+
+    /* to be reachable...*/
+    ESP_ERROR_CHECK(start_mdns_service());
+
+
 
     xTaskCreate(task_config, "config", 1024 * 2, (void *)0, 10, NULL);
     xTaskCreate(task_heartbeat, "heartbeat", 1024 * 2, (void *)1, 10, NULL);
