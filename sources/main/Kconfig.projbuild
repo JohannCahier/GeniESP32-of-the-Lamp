@@ -1,0 +1,255 @@
+menu "Genius of the Lamp Configuration"
+    menu "Network connection"
+        choice GENIUS_CONNECT_INTERFACE
+            prompt "Connect using"
+            default GENIUS_CONNECT_WIFI
+            help
+                Protocol examples can use Wi-Fi or Ethernet to connect to the network.
+                Ethernet has been disabled, please use WiFi (NB : resistance is futile, especially if <1ohm)
+
+            config GENIUS_CONNECT_WIFI
+                bool "Wi-Fi"
+
+    #         config GENIUS_CONNECT_ETHERNET
+    #             bool "Ethernet"
+
+        endchoice
+
+        config GENIUS_MDNS_HOSTNAME
+            string "mDNS hostname"
+            default "genius_lamp_1"
+            help
+                Hostname for mDNS resolution.
+
+        config GENIUS_MDNS_DESCRIPTION
+            string "mDNS description"
+            default "Genius of the Lamp #1"
+            help
+                Description for mDNS resolution.
+
+        if GENIUS_CONNECT_WIFI
+            config GENIUS_WIFI_SSID
+                string "WiFi SSID"
+                default "myssid"
+                help
+                    SSID (network name) for the example to connect to.
+
+            config GENIUS_WIFI_PASSWORD
+                string "WiFi Password"
+                default "mypassword"
+                help
+                    WiFi password (WPA or WPA2) for the example to use.
+                    Can be left blank if the network has no security set.
+        endif
+
+        if GENIUS_CONNECT_ETHERNET
+            choice GENIUS_USE_ETHERNET
+                prompt "Ethernet Type"
+                default GENIUS_USE_INTERNAL_ETHERNET if IDF_TARGET_ESP32
+                default GENIUS_USE_DM9051 if !IDF_TARGET_ESP32
+                help
+                    Select which kind of Ethernet will be used in the example.
+
+                config GENIUS_USE_INTERNAL_ETHERNET
+                    depends on IDF_TARGET_ESP32
+                    select ETH_USE_ESP32_EMAC
+                    bool "Internal EMAC"
+                    help
+                        Select internal Ethernet MAC controller.
+
+                config GENIUS_USE_DM9051
+                    bool "DM9051 Module"
+                    select ETH_USE_SPI_ETHERNET
+                    select ETH_SPI_ETHERNET_DM9051
+                    help
+                        Select external SPI-Ethernet module.
+            endchoice
+
+            if GENIUS_USE_INTERNAL_ETHERNET
+                choice GENIUS_ETH_PHY_MODEL
+                    prompt "Ethernet PHY Device"
+                    default GENIUS_ETH_PHY_IP101
+                    help
+                        Select the Ethernet PHY device to use in the example.
+
+                    config GENIUS_ETH_PHY_IP101
+                        bool "IP101"
+                        help
+                            IP101 is a single port 10/100 MII/RMII/TP/Fiber Fast Ethernet Transceiver.
+                            Goto http://www.icplus.com.tw/pp-IP101G.html for more information about it.
+
+                    config GENIUS_ETH_PHY_RTL8201
+                        bool "RTL8201/SR8201"
+                        help
+                            RTL8201F/SR8201F is a single port 10/100Mb Ethernet Transceiver with auto MDIX.
+                            Goto http://www.corechip-sz.com/productsview.asp?id=22 for more information about it.
+
+                    config GENIUS_ETH_PHY_LAN8720
+                        bool "LAN8720"
+                        help
+                            LAN8720A is a small footprint RMII 10/100 Ethernet Transceiver with HP Auto-MDIX Support.
+                            Goto https://www.microchip.com/LAN8720A for more information about it.
+
+                    config GENIUS_ETH_PHY_DP83848
+                        bool "DP83848"
+                        help
+                            DP83848 is a single port 10/100Mb/s Ethernet Physical Layer Transceiver.
+                            Goto http://www.ti.com/product/DP83848J for more information about it.
+                endchoice
+
+                config GENIUS_ETH_MDC_GPIO
+                    int "SMI MDC GPIO number"
+                    default 23
+                    help
+                        Set the GPIO number used by SMI MDC.
+
+                config GENIUS_ETH_MDIO_GPIO
+                    int "SMI MDIO GPIO number"
+                    default 18
+                    help
+                        Set the GPIO number used by SMI MDIO.
+            endif
+
+            if GENIUS_USE_DM9051
+                config GENIUS_DM9051_SPI_HOST
+                    int "SPI Host Number"
+                    range 0 2
+                    default 1
+                    help
+                        Set the SPI host used to communicate with DM9051.
+
+                config GENIUS_DM9051_SCLK_GPIO
+                    int "SPI SCLK GPIO number"
+                    range 0 33
+                    default 19
+                    help
+                        Set the GPIO number used by SPI SCLK.
+
+                config GENIUS_DM9051_MOSI_GPIO
+                    int "SPI MOSI GPIO number"
+                    range 0 33
+                    default 23
+                    help
+                        Set the GPIO number used by SPI MOSI.
+
+                config GENIUS_DM9051_MISO_GPIO
+                    int "SPI MISO GPIO number"
+                    range 0 33
+                    default 25
+                    help
+                        Set the GPIO number used by SPI MISO.
+
+                config GENIUS_DM9051_CS_GPIO
+                    int "SPI CS GPIO number"
+                    range 0 33
+                    default 22
+                    help
+                        Set the GPIO number used by SPI CS.
+
+                config GENIUS_DM9051_SPI_CLOCK_MHZ
+                    int "SPI clock speed (MHz)"
+                    range 20 80
+                    default 20
+                    help
+                        Set the clock speed (MHz) of SPI interface.
+
+                config GENIUS_DM9051_INT_GPIO
+                    int "Interrupt GPIO number"
+                    default 4
+                    help
+                        Set the GPIO number used by DM9051 interrupt.
+            endif
+
+            config GENIUS_ETH_PHY_RST_GPIO
+                int "PHY Reset GPIO number"
+                default 5
+                help
+                    Set the GPIO number used to reset PHY chip.
+                    Set to -1 to disable PHY chip hardware reset.
+
+            config GENIUS_ETH_PHY_ADDR
+                int "PHY Address"
+                range 0 31 if GENIUS_USE_INTERNAL_ETHERNET
+                range 1 1 if !GENIUS_USE_INTERNAL_ETHERNET
+                default 1
+                help
+                    Set PHY address according your board schematic.
+        endif
+
+        config GENIUS_CONNECT_IPV6
+            bool "Obtain IPv6 link-local address"
+            default y
+            help
+                By default, examples will wait until IPv4 and IPv6 addresses are obtained.
+                Disable this option if the network does not support IPv6.
+    endmenu
+
+    menu "I²C Configuration"
+        config GENIUS_I2C_MASTER_SDA
+            int "Master SDA GPIO"
+            default 18
+            range 0 33
+            help
+                SDA GPIO for i²c master interface.
+
+        config GENIUS_I2C_MASTER_SCL
+            int "Master SCL GPIO"
+            default 19
+            range 0 33
+            help
+                SCL GPIO for i²c master interface.
+
+        config GENIUS_I2C_SLAVE_SDA
+            int "Slave SDA GPIO"
+            default 22
+            range 0 33
+            help
+                SDA GPIO for i²c slave interface. Must be different from Master SDA.
+
+        config GENIUS_I2C_SLAVE_SCL
+            int "Slave SCL GPIO"
+            default 23
+            range 0 33
+            help
+                SCL GPIO for i²c slave interface. Must be different from Master SCL.
+
+        config GENIUS_I2C_SLAVE_ADDRESS
+            hex "Genius slave address"
+            default 0x20
+            range 0x08 0x7F
+            help
+                The i²c _7-bit_ [0x08..0x7F] slave address on which the Genius listens.
+
+                YOU SHOULD NOT modify this.
+
+        config GENIUS_I2C_LAMP_SLAVE_ADDRESS
+            hex "Lamp slave address"
+            default 0x08
+            range 0x08 0x7F
+            help
+                The i²c
+                _7-bit_ [0x8..0x7F] slave address on which the Lamp listens.
+
+                YOU SHOULD NOT modify this.
+
+    endmenu
+
+    config GENIUS_OFF_CLICK_DELAY_MS
+        int "Off click delay"
+        default 2500
+        help
+            Delay, in milliseconds, between genius activation (i²c stream startup) and the simulated button click to turn off the lamp.
+
+    config GENIUS_DEFAULT_AMBIENT_LIGHT
+        int "Default ambient light"
+        default 0
+        range -32768 32767
+        help
+            Default value send to the Lamp as ambient ligh level.
+            16 bit signed interger so in the [-32768..32767] range.
+            -32768 is the darkest ambient light, 32767 the brightest, 0 is a mean value.
+
+            This can be overriden by sending ambient light POST request to the Genius HTTP server.
+
+
+endmenu
