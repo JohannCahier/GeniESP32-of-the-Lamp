@@ -232,6 +232,29 @@ menu "Genius of the Lamp Configuration"
 
                 YOU SHOULD NOT modify this.
 
+        config GENIUS_I2C_HEARTBEAT_PERIOD
+            int "Heartbeat period"
+            default 1000
+            help
+                In milliseconds. Period between 2 "heartbeat cycles".
+
+        config GENIUS_I2C_HEARTBEAT_DELAY
+            int "Heartbeat delay"
+            default 200
+            help
+                In milliseconds. Delay between the 2 framex of one single "heartbeat cycles".
+
+        config GENIUS_I2C_AMBIENT_LIGHT_PERIOD
+            int "Ambient ligth period"
+            default 1500
+            help
+                In milliseconds. Period between 2 ambient light frames.
+
+        config GENIUS_I2C_CONFIG_PERIOD
+            int "Config/init period"
+            default 1000
+            help
+                In milliseconds. Period between 2 config/init frames.
     endmenu
 
     config GENIUS_OFF_CLICK_DELAY_MS
@@ -251,5 +274,6 @@ menu "Genius of the Lamp Configuration"
 
             This can be overriden by sending ambient light POST request to the Genius HTTP server.
 
+#     config GENIUS_I2C_SLAVE_BUF_LEN
 
 endmenu

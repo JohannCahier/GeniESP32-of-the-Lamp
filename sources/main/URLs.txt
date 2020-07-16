@@ -1,12 +1,27 @@
-<address>
+GET http(s)://<address>/state
 
-http(s)://<address>/
-
-http(s)://<address>/state/on(?intensity=0x3F)
-http(s)://<address>/state/off
-
-http(s)://<address>/state/toggle
-
-http(s)://<address>/ambient_light?value=0xFFFF
+REPLY:
+    - 200: OK
+        [ON|OFF]
 
 
+POST http(s)://<address>/state
+    state=on|off
+
+REPLY:
+    - 200: OK
+    - 40?: BAD REQUEST
+
+
+POST http(s)://<address>/reboot
+
+REPLY:
+    - 200: OK
+
+
+POST http(s)://<address>/ambient_light
+    value=[632768..32767]
+
+REPLY:
+    - 200: OK
+    - 40?: BAD REQUEST

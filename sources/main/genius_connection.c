@@ -21,6 +21,7 @@
 #include "freertos/event_groups.h"
 #include "lwip/err.h"
 #include "lwip/sys.h"
+#include "nvs_flash.h"
 
 #define GOT_IPV4_BIT BIT(0)
 #define GOT_IPV6_BIT BIT(1)
@@ -69,6 +70,12 @@ static void on_got_ipv6(void *arg, esp_event_base_t event_base,
 
 esp_err_t genius_connect()
 {
+    tcpip_adapter_init();
+
+    // Workaround to get rid of old WiFi calibration data
+    // See : https://github.com/espressif/esp-idf/issues/1328#issuecomment-347751746
+    ESP_ERROR_CHECK(nvs_flash_init());
+
     if (s_connect_event_group != NULL) {
         return ESP_ERR_INVALID_STATE;
     }
