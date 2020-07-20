@@ -11,6 +11,7 @@
 // #include <string.h>
 #include "httpd.h"
 #include "globalvars.h"
+#include "i2c_lamp_protocol.h"
 
 static const char *TAG = "httpd";
 
@@ -57,13 +58,15 @@ static esp_err_t state_post_handler(httpd_req_t *req) {
             buffer[i] = tolower(buffer[i]);
         }
 
-        // 0123456
-        // state=
         if(strncmp("state=on", buffer, 8) == 0) {
             globals.state = ON;
+            genius_i2c_enable();
+            ESP_LOGI(TAG, "STATE = ON !!");
         }
         else if(strncmp("state=off", buffer, 9) == 0) {
             globals.state = OFF;
+            genius_i2c_disable();
+            ESP_LOGI(TAG, "STATE = OFF !!");
         }
         else {
             ESP_LOGW(TAG, "Invalid state command : %s", buffer);
@@ -108,7 +111,8 @@ static const httpd_uri_t ambient_light_post = {
 
 
 
-void reboot(void) {
+void reboot(void* _) {
+    vTaskDelay(CONFIG_GENIUS_REBOOT_TASK_DELAY_MS / portTICK_RATE_MS);
     ESP_LOGW(TAG, "Restarting now.\n");
     fflush(stdout);
     esp_restart();
@@ -118,8 +122,7 @@ void reboot(void) {
 static esp_err_t reboot_post_handler(httpd_req_t *req) {
     static const char reboot_msg[] = "Rebooting now !";
     httpd_resp_send(req, reboot_msg, sizeof(reboot_msg));
-    reboot();
-    // reboot() wont return... But make the compiler happy:
+    xTaskCreate(reboot, "reboot", 1024 * 2, (void *)0, 10, NULL);
     return ESP_OK;
 }
 

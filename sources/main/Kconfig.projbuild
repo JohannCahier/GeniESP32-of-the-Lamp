@@ -274,6 +274,14 @@ menu "Genius of the Lamp Configuration"
 
             This can be overriden by sending ambient light POST request to the Genius HTTP server.
 
+    config GENIUS_REBOOT_TASK_DELAY_MS
+        int "Reboot task delay (ms)"
+        default 200
+        range 10 2000
+        help
+            Delay the reboot task will wait before  actually rebooting
+            when receiving a POST /reboot request.
+            (Let some time to send the HTTP response).
 #     config GENIUS_I2C_SLAVE_BUF_LEN
 
 endmenu

@@ -86,7 +86,7 @@ void app_main(void)
     // start network and connect
     ESP_ERROR_CHECK(genius_connect());
 
-    // to be reachable through multicast DNS...
+    // to be reachable through mDNS...
     // << Yeah, moolticast, she knows it's a moolticast... >> Korben Dallas
     ESP_ERROR_CHECK(start_mdns_service());
 
