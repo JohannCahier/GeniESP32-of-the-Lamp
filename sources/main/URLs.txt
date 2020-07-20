@@ -20,7 +20,7 @@ REPLY:
 
 
 POST http(s)://<address>/ambient_light
-    value=[632768..32767]
+    value=[32768..32767]
 
 REPLY:
     - 200: OK

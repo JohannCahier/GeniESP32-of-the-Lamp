@@ -25,43 +25,6 @@ globals_t globals;
 static const char *TAG = "genius-main";
 
 
-#define PERIOD_HEARTBEAT        CONFIG_GENIUS_I2C_HEARTBEAT_PERIOD
-#define DELAY_HEARTBEAT         CONFIG_GENIUS_I2C_HEARTBEAT_DELAY
-#define PERIOD_CONFIG           CONFIG_GENIUS_I2C_AMBIENT_LIGHT_PERIOD
-#define PERIOD_AMBIENT_LIGHT    CONFIG_GENIUS_I2C_CONFIG_PERIOD
-
-void task_heartbeat(void *arg) {
-    while(1) {
-        if (send_i2c_heartbeat(0) != ESP_OK) {
-            ESP_LOGW(TAG, "ERR : heartbeat(0)\n");
-        }
-        vTaskDelay(DELAY_HEARTBEAT/ portTICK_RATE_MS);
-        if (send_i2c_heartbeat(1) != ESP_OK) {
-            ESP_LOGW(TAG, "ERR : heartbeat(1)\n");
-        }
-        vTaskDelay( (PERIOD_HEARTBEAT-DELAY_HEARTBEAT) / portTICK_RATE_MS);
-    }
-}
-
-void task_config(void *arg) {
-    while(1) {
-        if (send_i2c_config() != ESP_OK) {
-            ESP_LOGW(TAG, "ERR : config\n");
-        }
-        vTaskDelay(PERIOD_CONFIG / portTICK_RATE_MS);
-    }
-}
-
-void task_ambiant_light(void *arg) {
-    while(1) {
-        if (send_i2c_ambiant_light(0x200) != ESP_OK) {
-            ESP_LOGW(TAG, "ERR : ambiance()\n");
-        }
-        vTaskDelay(PERIOD_AMBIENT_LIGHT / portTICK_RATE_MS);
-    }
-}
-
-
 
 
 static esp_err_t start_mdns_service()
@@ -112,24 +75,23 @@ void app_main(void)
 
     // ================================================
 
+    globals.ambient_light = CONFIG_GENIUS_DEFAULT_AMBIENT_LIGHT;
+    globals.state = ON;
 
-    // Start i²c
-    ESP_ERROR_CHECK(i2c_master_init());
-    ESP_ERROR_CHECK(i2c_slave_init());
+    // Init/config i²c
+    ESP_ERROR_CHECK(genius_i2c_init());
 
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 
     // start network and connect
     ESP_ERROR_CHECK(genius_connect());
 
-    // to be reachable through (leeloo-)multicast DNS...
-    // Korben : << Oui c'est bon, elle sait ce que c'est qu'un moolticast ! >>
+    // to be reachable through multicast DNS...
+    // << Yeah, moolticast, she knows it's a moolticast... >> Korben Dallas
     ESP_ERROR_CHECK(start_mdns_service());
 
     ESP_ERROR_CHECK(genius_httpd_start());
 
-    // When /state is ON, those tasks will "ping" the Lamp
-    xTaskCreate(task_config, "config", 1024 * 2, (void *)0, 10, NULL);
-    xTaskCreate(task_heartbeat, "heartbeat", 1024 * 2, (void *)1, 10, NULL);
-    xTaskCreate(task_ambiant_light, "ambiance", 1024 * 2, (void *)2, 10, NULL);
+    // start sending i²c frames
+    ESP_ERROR_CHECK(genius_i2c_enable());
 }

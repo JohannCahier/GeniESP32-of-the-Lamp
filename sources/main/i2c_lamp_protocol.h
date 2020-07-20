@@ -5,18 +5,15 @@
 extern "C" {
 #endif
 
+// Global init
+esp_err_t genius_i2c_init(void);
 
-esp_err_t i2c_master_init(void);
-esp_err_t i2c_slave_init(void);
+// installs slave drive driver (ACK received frames) and starts sending frames
+esp_err_t genius_i2c_enable();
 
-// To send heartbeat frames, heartbeat(0) and heartbeat(1)
-esp_err_t send_i2c_heartbeat(uint8_t value);
+//uninstalls slave driver (NAK reveived frames) ands stop sending frames
+esp_err_t genius_i2c_disable();
 
-// send the config/init frame...
-esp_err_t send_i2c_config(void);
-
-// send the ambient light frame
-esp_err_t send_i2c_ambiant_light(int16_t intensity);
 
 // send button frames
 // tempo is the delay during which the button has been pressed.

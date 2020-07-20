@@ -7,7 +7,7 @@
 
 typedef struct {
     enum {ON, OFF}  state;
-    int16_t         ambiant_ligh;
+    int16_t         ambient_light;
     httpd_handle_t  http_server;
 } globals_t;
 
