@@ -44,7 +44,9 @@ static esp_err_t start_mdns_service()
     // prolly not necessary, doesn't eat much bread anywayz...
     mdns_service_add(NULL, "_http", "_tcp", 80, NULL, 0);
 
-    ESP_LOGI(TAG, "MDNS Init done...\n");
+    ESP_LOGI(TAG, "MDNS Init done, local hostname is :");
+    ESP_LOGW(TAG, "%s", CONFIG_GENIUS_MDNS_HOSTNAME);
+    ESP_LOGI(TAG, "-----------------------------------\n\n");
     return ESP_OK;
 }
 
@@ -52,6 +54,10 @@ static esp_err_t start_mdns_service()
 
 extern const char *genie_ASCII_art[];
 extern const unsigned int genie_ASCII_art_len;
+
+extern void SA2GPIO_init(void);
+extern void SA2GPIO_task(void*);
+extern void SA2GPIO_debug_task(void*);
 
 void app_main(void)
 {
@@ -78,6 +84,8 @@ void app_main(void)
     globals.ambient_light = CONFIG_GENIUS_DEFAULT_AMBIENT_LIGHT;
     globals.state = ON;
 
+    SA2GPIO_init();
+
     // Init/config i²c
     ESP_ERROR_CHECK(genius_i2c_init());
 
@@ -93,5 +101,7 @@ void app_main(void)
     ESP_ERROR_CHECK(genius_httpd_start());
 
     // start sending i²c frames
-    ESP_ERROR_CHECK(genius_i2c_enable());
+    ESP_ERROR_CHECK(genius_i2c_enable(false));
+
+//     xTaskCreate(SA2GPIO_task, "slave addressed", 1024 * 2, (void *)1, 10, NULL);
 }

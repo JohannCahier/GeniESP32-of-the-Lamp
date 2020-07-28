@@ -1,27 +1,65 @@
 GET http(s)://<address>/state
-
-REPLY:
-    - 200: OK
-        [ON|OFF]
+    - DESC : returns current Lamp's state
+    - REPLY:
+        - 200: OK
+            [ON|OFF]
 
 
 POST http(s)://<address>/state
-    state=on|off
+    - DESC : Sets the lamp's state (ON or OFF).
+             if turn_light_on, send i²c heartbeat, which turns light on
+             ambient_light can be specified to save 1 call to dedicated URL.
+    - PARAMS:
+        - state: on|off
+        <if state == on>
+            - turn_light_on:
+                - on|off
+                - yes|no
+                - true|false
+                - 1|0
+            - ambient_light=[-32768..32767]
+        </if>
 
-REPLY:
-    - 200: OK
-    - 40?: BAD REQUEST
+    - REPLY:
+        - 200: OK
+        - 400: BAD REQUEST
+            unkown, badly formatted, or out-of-bound paramter found
 
 
-POST http(s)://<address>/reboot
-
-REPLY:
-    - 200: OK
 
 
 POST http(s)://<address>/ambient_light
-    value=[32768..32767]
+    - DESC : Sets the ambient light value (dimm light according to user's setting)
+    -PARAMS :
+        - value: [-32768..32767]
 
-REPLY:
-    - 200: OK
-    - 40?: BAD REQUEST
+    - REPLY:
+        - 200: OK
+        - 400: BAD REQUEST : unkown, badly formatted, or out-of-bound paramter found
+
+
+
+
+
+POST http(s)://<address>/reboot
+    - DESC : Replies 200 and reboots
+
+    - REPLY:
+        - 200: OK
+
+
+
+----- NOT YET IMPLEMENTED -----------------
+
+POST http(s)://<address>/firmware_ota
+    - DESC:
+        Tries to connect to HTTPS server, serving no firmware version, download a new version and, if successful, boots it.
+        NOTE : please see URLs below for detailled esp-idf OTA mecanism description:
+            - https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/esp_https_ota.html
+            - https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/ota.html
+
+    - REPLY:
+        - 200: OK
+            New Firmware updated OTA
+        - 500: INTERNAL SERVER ERROR:
+            Problem occured while updating the firmware.

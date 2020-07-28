@@ -3,6 +3,7 @@
 #include "freertos/timers.h"
 #include "driver/i2c.h"
 #include "esp_log.h"
+#include "globalvars.h"
 
 #define I2C_SLAVE_BUF_LEN 1024
 #define I2C_PORT_MASTER 0
@@ -52,6 +53,11 @@ chksum(uint8_t dest, uint8_t *payload, uint8_t pl_size)
 static esp_err_t i2c_master_write_slave(uint8_t destination, uint8_t *payload, uint8_t pl_size)
 {
     esp_err_t err;
+//     static unsigned long long last_frame_ts = 0;
+//
+//     while (last_frame_ts != 0 && esp_timer_get_time()-last_frame_ts > 20000) {
+//         vTaskDelay(20/portTICK_RATE_MS);
+//     }
 
     assert(payload[0] == CONFIG_GENIUS_I2C_SLAVE_ADDRESS);
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
@@ -61,6 +67,9 @@ static esp_err_t i2c_master_write_slave(uint8_t destination, uint8_t *payload, u
     i2c_master_stop(cmd);
     err = i2c_master_cmd_begin(I2C_PORT_MASTER, cmd, 1000 / portTICK_RATE_MS);
     i2c_cmd_link_delete(cmd);
+
+//     last_frame_ts = esp_timer_get_time();
+
     return err;
 }
 
@@ -131,15 +140,21 @@ esp_err_t genius_i2c_send_button_up(uint8_t tempo) {
 #define PERIOD_CONFIG           CONFIG_GENIUS_I2C_CONFIG_PERIOD
 #define PERIOD_AMBIENT_LIGHT    CONFIG_GENIUS_I2C_AMBIENT_LIGHT_PERIOD
 
+void heartbeat_once(void* arg) {
+    if (arg) ESP_LOGW(TAG, "<3");
+
+    while (genius_i2c_send_heartbeat(0) != ESP_OK) {
+        ESP_LOGW(TAG, "ERR : heartbeat(0)");
+    }
+    vTaskDelay(DELAY_HEARTBEAT/ portTICK_RATE_MS);
+    while (genius_i2c_send_heartbeat(1) != ESP_OK) {
+        ESP_LOGW(TAG, "ERR : heartbeat(1)");
+    }
+}
+
 void task_heartbeat(void *arg) {
     while(1) {
-        while (genius_i2c_send_heartbeat(0) != ESP_OK) {
-            ESP_LOGW(TAG, "ERR : heartbeat(0)\n");
-        }
-        vTaskDelay(DELAY_HEARTBEAT/ portTICK_RATE_MS);
-        while (genius_i2c_send_heartbeat(1) != ESP_OK) {
-            ESP_LOGW(TAG, "ERR : heartbeat(1)\n");
-        }
+        heartbeat_once(arg);
         vTaskDelay( (PERIOD_HEARTBEAT-DELAY_HEARTBEAT) / portTICK_RATE_MS);
     }
 }
@@ -147,7 +162,7 @@ void task_heartbeat(void *arg) {
 void task_config(void *arg) {
     while(1) {
         while (genius_i2c_send_config() != ESP_OK) {
-            ESP_LOGW(TAG, "ERR : config\n");
+            ESP_LOGW(TAG, "ERR : config");
         }
         vTaskDelay(PERIOD_CONFIG / portTICK_RATE_MS);
     }
@@ -155,8 +170,8 @@ void task_config(void *arg) {
 
 void task_ambiant_light(void *arg) {
     while(1) {
-        if (genius_i2c_send_ambiant_light(0x0200) != ESP_OK) {
-            ESP_LOGW(TAG, "ERR : ambiance()\n");
+        if (genius_i2c_send_ambiant_light(globals.ambient_light) != ESP_OK) {
+            ESP_LOGW(TAG, "ERR : ambiance()");
         }
         vTaskDelay(PERIOD_AMBIENT_LIGHT / portTICK_RATE_MS);
     }
@@ -186,11 +201,13 @@ static TimerHandle_t iniclk = NULL;
 
 esp_err_t genius_i2c_init()
 {
+
+/*
     iniclk = xTimerCreate("Timer",
                           CONFIG_GENIUS_OFF_CLICK_DELAY_MS / portTICK_RATE_MS,
                           pdFALSE, // no auto-reload (ONESHOT)
                           NULL,  // don't use ID
-                          cb_initial_click);
+                          cb_initial_click);*/
 
     // config for slave
     conf_slave.mode = I2C_MODE_SLAVE;
@@ -218,7 +235,7 @@ esp_err_t genius_i2c_init()
 
 
 
-esp_err_t genius_i2c_enable() {
+esp_err_t genius_i2c_enable(bool with_heartbeat) {
     // seems needed (?)
     i2c_param_config(I2C_PORT_SLAVE, &conf_slave);
     // install slave driver
@@ -228,13 +245,28 @@ esp_err_t genius_i2c_enable() {
     if (err == ESP_OK) {
         xTaskCreate(_i2c_slave_task, "i²c slave", 1024 * 2, (void *)0, 10, &task_slave_hdl);
         // start tasks to "ping" the Lamp
-        xTaskCreate(task_config, "config", 1024 * 2, (void *)0, 10, &task_config_hdl);
-        xTaskCreate(task_heartbeat, "heartbeat", 1024 * 2, (void *)1, 10, &task_heartbeat_hdl);
-        xTaskCreate(task_ambiant_light, "ambiance", 1024 * 2, (void *)2, 10, &task_ambient_light_hdl);
+        if (with_heartbeat)
+            xTaskCreate(task_heartbeat, "heartbeat", 1024 * 2, (void *)true, 10, &task_heartbeat_hdl);
+//             xTaskCreate(task_heartbeat, "heartbeat", 1024 * 2, (void *)1, 10, &task_heartbeat_hdl);
+//         }
+//             xTaskCreate(task_config, "config", 1024 * 2, (void *)0, 10, &task_config_hdl);
+//         xTaskCreate(task_ambiant_light, "ambiance", 1024 * 2, (void *)2, 10, &task_ambient_light_hdl);
+        while (genius_i2c_send_config() != ESP_OK) {
+            ESP_LOGW(TAG, "ERR : config");
+        }
+
+        vTaskDelay(500 / portTICK_RATE_MS);
+//         if (with_heartbeat) heartbeat_once((void*)true);
+
+        vTaskDelay(500 / portTICK_RATE_MS);
+        while (genius_i2c_send_ambiant_light(globals.ambient_light) != ESP_OK) {
+            ESP_LOGW(TAG, "ERR : ambiance()");
+        }
+
 
         // one shot timer for the button click
-        ESP_LOGI(TAG, "Start timer for click (%d ms)", CONFIG_GENIUS_OFF_CLICK_DELAY_MS);
-        xTimerStart(iniclk, CONFIG_GENIUS_OFF_CLICK_DELAY_MS / portTICK_RATE_MS);
+//         ESP_LOGI(TAG, "Start timer for click (%d ms)", CONFIG_GENIUS_OFF_CLICK_DELAY_MS);
+        //xTimerStart(iniclk, CONFIG_GENIUS_OFF_CLICK_DELAY_MS / portTICK_RATE_MS);
     } else {
         ESP_LOGE(TAG, "Could not install i²c slave driver");
     }
@@ -257,6 +289,7 @@ esp_err_t genius_i2c_disable() {
         vTaskDelete(task_ambient_light_hdl);
         task_ambient_light_hdl = NULL;
     }
+
     if (task_slave_hdl) {
         vTaskDelete(task_slave_hdl);
         task_slave_hdl = NULL;

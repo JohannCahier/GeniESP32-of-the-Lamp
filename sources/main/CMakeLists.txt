@@ -3,4 +3,5 @@ idf_component_register(SRCS "main.c"
                        "genius_connection.c"
                        "httpd.c"
                        "genie_ascii_art.c"
+                       "slave_adressed_to_gpio.c"
                     INCLUDE_DIRS "")

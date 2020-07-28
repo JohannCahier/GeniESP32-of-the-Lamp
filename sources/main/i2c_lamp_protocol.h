@@ -9,7 +9,7 @@ extern "C" {
 esp_err_t genius_i2c_init(void);
 
 // installs slave drive driver (ACK received frames) and starts sending frames
-esp_err_t genius_i2c_enable();
+esp_err_t genius_i2c_enable(bool with_heartbeat);
 
 //uninstalls slave driver (NAK reveived frames) ands stop sending frames
 esp_err_t genius_i2c_disable();
