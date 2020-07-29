@@ -137,8 +137,8 @@ esp_err_t genius_i2c_send_button_up(uint8_t tempo) {
 
 #define PERIOD_HEARTBEAT        CONFIG_GENIUS_I2C_HEARTBEAT_PERIOD
 #define DELAY_HEARTBEAT         CONFIG_GENIUS_I2C_HEARTBEAT_DELAY
-#define PERIOD_CONFIG           CONFIG_GENIUS_I2C_CONFIG_PERIOD
-#define PERIOD_AMBIENT_LIGHT    CONFIG_GENIUS_I2C_AMBIENT_LIGHT_PERIOD
+//#define PERIOD_CONFIG           CONFIG_GENIUS_I2C_CONFIG_PERIOD
+//#define PERIOD_AMBIENT_LIGHT    CONFIG_GENIUS_I2C_AMBIENT_LIGHT_PERIOD
 
 void heartbeat_once(void* arg) {
     if (arg) ESP_LOGW(TAG, "<3");
@@ -158,7 +158,7 @@ void task_heartbeat(void *arg) {
         vTaskDelay( (PERIOD_HEARTBEAT-DELAY_HEARTBEAT) / portTICK_RATE_MS);
     }
 }
-
+/*
 void task_config(void *arg) {
     while(1) {
         while (genius_i2c_send_config() != ESP_OK) {
@@ -186,7 +186,7 @@ void cb_initial_click(void *arg) {
     while (genius_i2c_send_button_up(1) != ESP_OK) {
         ESP_LOGW(TAG, "timer : retry btn up");
     }
-}
+}*/
 
 //  =========== API IMPLEMENTATION ========================
 
@@ -235,6 +235,11 @@ esp_err_t genius_i2c_init()
 
 
 
+
+// NB : to reduce i²c traffic jam, because the local master is unable to keep quiet when another master talks to the local slave, and creates congestion (it seems)
+// So create the only "pinging" task for heartbeat, when wanted to light up the lamp when setting up i²c comm.
+// NOTE : sending heartbeat ONLY once never ligthed up the lamp... But maybe sending it *INDEFINITELY* is overkill... Maybe try sending it twice, or even three times...
+
 esp_err_t genius_i2c_enable(bool with_heartbeat) {
     // seems needed (?)
     i2c_param_config(I2C_PORT_SLAVE, &conf_slave);
@@ -244,29 +249,20 @@ esp_err_t genius_i2c_enable(bool with_heartbeat) {
                                       I2C_SLAVE_BUF_LEN, 0);
     if (err == ESP_OK) {
         xTaskCreate(_i2c_slave_task, "i²c slave", 1024 * 2, (void *)0, 10, &task_slave_hdl);
-        // start tasks to "ping" the Lamp
-        if (with_heartbeat)
-            xTaskCreate(task_heartbeat, "heartbeat", 1024 * 2, (void *)true, 10, &task_heartbeat_hdl);
-//             xTaskCreate(task_heartbeat, "heartbeat", 1024 * 2, (void *)1, 10, &task_heartbeat_hdl);
-//         }
-//             xTaskCreate(task_config, "config", 1024 * 2, (void *)0, 10, &task_config_hdl);
-//         xTaskCreate(task_ambiant_light, "ambiance", 1024 * 2, (void *)2, 10, &task_ambient_light_hdl);
+
         while (genius_i2c_send_config() != ESP_OK) {
             ESP_LOGW(TAG, "ERR : config");
         }
 
-        vTaskDelay(500 / portTICK_RATE_MS);
-//         if (with_heartbeat) heartbeat_once((void*)true);
+        // start tasks to "ping" the Lamp
+        if (with_heartbeat)
+            xTaskCreate(task_heartbeat, "heartbeat", 1024 * 2, (void *)true, 10, &task_heartbeat_hdl);
 
         vTaskDelay(500 / portTICK_RATE_MS);
+
         while (genius_i2c_send_ambiant_light(globals.ambient_light) != ESP_OK) {
             ESP_LOGW(TAG, "ERR : ambiance()");
         }
-
-
-        // one shot timer for the button click
-//         ESP_LOGI(TAG, "Start timer for click (%d ms)", CONFIG_GENIUS_OFF_CLICK_DELAY_MS);
-        //xTimerStart(iniclk, CONFIG_GENIUS_OFF_CLICK_DELAY_MS / portTICK_RATE_MS);
     } else {
         ESP_LOGE(TAG, "Could not install i²c slave driver");
     }

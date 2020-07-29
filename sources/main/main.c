@@ -55,17 +55,13 @@ static esp_err_t start_mdns_service()
 extern const char *genie_ASCII_art[];
 extern const unsigned int genie_ASCII_art_len;
 
-extern void SA2GPIO_init(void);
-extern void SA2GPIO_task(void*);
-extern void SA2GPIO_debug_task(void*);
-
 void app_main(void)
 {
     // ----------- On-boot greeter ------------------
     ESP_LOGI(TAG, "Genie of the Lamp sayz: << Hello! >> and wavez a hand\n");
     for (int i=0; i<genie_ASCII_art_len; i++)
         { ESP_LOGW(TAG, "%s", genie_ASCII_art[i]); }
-
+    ESP_LOGI(TAG, ">>> Version: %d.%d \n", CONFIG_GENIUS_VERSION_MAJOR, CONFIG_GENIUS_VERSION_MINOR);
     /* Print chip information */
     esp_chip_info_t chip_info;
     esp_chip_info(&chip_info);

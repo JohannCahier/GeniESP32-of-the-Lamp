@@ -1,4 +1,13 @@
 menu "Genius of the Lamp Configuration"
+    config GENIUS_VERSION_MAJOR
+        int "Version Major"
+        default 0
+
+    config GENIUS_VERSION_MINOR
+        int "Version Minor"
+        default 1
+
+
     menu "Network connection"
         choice GENIUS_CONNECT_INTERFACE
             prompt "Connect using"
@@ -185,6 +194,27 @@ menu "Genius of the Lamp Configuration"
     endmenu
 
     menu "I²C Configuration"
+
+        choice GENIUS_I2C_BOOT_STATE
+            prompt "i²c link state at boot"
+            default GENIUS_I2C_BOOT_STATE_OFF
+            help
+                Default value of the Genius <-> Lamp i²c link when Genius boots.
+                    * OFF : no i²c communication
+                    * ON (with light off) : i²c comm is ON, but no heartbeat is sent
+                    * ON (with light on) : i²c comm is ON, heartbeat is sent, so should light up
+
+            config GENIUS_I2C_BOOT_STATE_OFF
+                bool "OFF"
+
+            config GENIUS_I2C_BOOT_STATE_ON_LIGHT_OFF
+                bool "ON (with light off)"
+
+            config GENIUS_I2C_BOOT_STATE_ON_LIGHT_ON
+                bool "ON (with light on)"
+
+        endchoice
+
         config GENIUS_I2C_MASTER_SDA
             int "Master SDA GPIO"
             default 18
@@ -244,24 +274,46 @@ menu "Genius of the Lamp Configuration"
             help
                 In milliseconds. Delay between the 2 framex of one single "heartbeat cycles".
 
-        config GENIUS_I2C_AMBIENT_LIGHT_PERIOD
-            int "Ambient ligth period"
-            default 1500
-            help
-                In milliseconds. Period between 2 ambient light frames.
+#         config GENIUS_I2C_AMBIENT_LIGHT_PERIOD
+#             int "Ambient ligth period"
+#             default 1500
+#             help
+#                 In milliseconds. Period between 2 ambient light frames.
+#
+#         config GENIUS_I2C_CONFIG_PERIOD
+#             int "Config/init period"
+#             default 1000
+#             help
+#                 In milliseconds. Period between 2 config/init frames.
 
-        config GENIUS_I2C_CONFIG_PERIOD
-            int "Config/init period"
-            default 1000
-            help
-                In milliseconds. Period between 2 config/init frames.
     endmenu
 
-    config GENIUS_OFF_CLICK_DELAY_MS
-        int "Off click delay"
-        default 2500
-        help
-            Delay, in milliseconds, between genius activation (i²c stream startup) and the simulated button click to turn off the lamp.
+
+    menu "OTA Firmware Update Server"
+
+        config GENIUS_ENABLE_OTA_FW_UPDATE
+            bool "Authorize OTA Firmware Update"
+            default n
+            help
+                Activate this to enable the /ota_fw_update HTTP method
+
+        if GENIUS_ENABLE_OTA_FW_UPDATE
+            config GENIUS_FIRMWARE_UPGRADE_URL
+                string "FW download URL"
+                default "https://server/page/fw.bin"
+                help
+                    URL where a new FW version is published.
+                    OTA FW Update is triggered by calling /ota_fw_update HTTP method
+        endif
+
+    endmenu
+
+
+#     config GENIUS_OFF_CLICK_DELAY_MS
+#         int "Off click delay"
+#         default 2500
+#         help
+#             Delay, in milliseconds, between genius activation (i²c stream startup) and the simulated button click to turn off the lamp.
 
     config GENIUS_DEFAULT_AMBIENT_LIGHT
         int "Default ambient light"

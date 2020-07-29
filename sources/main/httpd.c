@@ -12,6 +12,7 @@
 #include "httpd.h"
 #include "globalvars.h"
 #include "i2c_lamp_protocol.h"
+#include "simple_ota_update.h"
 
 static const char *TAG = "httpd";
 
@@ -73,6 +74,16 @@ esp_err_t parse_ambient_light_value(const char* strval, int32_t *value) {
     *value = (int16_t)value_tmp;
     return ESP_OK;
 }
+
+
+
+void reboot(void* _) {
+    vTaskDelay(CONFIG_GENIUS_REBOOT_TASK_DELAY_MS / portTICK_RATE_MS);
+    ESP_LOGW(TAG, "Restarting now.\n");
+    fflush(stdout);
+    esp_restart();
+}
+
 
 
 
@@ -201,45 +212,6 @@ static esp_err_t state_post_handler(httpd_req_t *req) {
         }
     }
 
-
-    /*
-    if ( < sizeof(buffer)) {
-        // Read the data for the request
-        while ((ret = httpd_req_recv(req, buffer,
-                        MIN(req->content_len, sizeof(buffer)))) <= 0) {
-            if (ret == HTTPD_SOCK_ERR_TIMEOUT) {
-                // Retry receiving if timeout occurred
-                continue;
-            }
-            return ESP_FAIL;
-        }
-
-        for (int i=0; i<req->content_len; i++) {
-            buffer[i] = tolower(buffer[i]);
-        }
-
-        if(strncmp("state=on", buffer, 8) == 0) {
-            globals.state = ON;
-            ESP_LOGI(TAG, "STATE = ON !!");
-        }
-        else if(strncmp("state=off", buffer, 9) == 0) {
-            globals.state = OFF;
-            genius_i2c_disable();
-            ESP_LOGI(TAG, "STATE = OFF !!");
-        }
-        else {
-            ESP_LOGW(TAG, "Invalid state command : %s", buffer);
-            return ESP_FAIL;
-        }
-        ESP_LOGI(TAG, "  RECEIVED DATA : %.*s", ret, buffer);
-    } else {
-        ESP_LOGI(TAG, "String too long, rejecting if... (size == %d)", req->content_len);
-
-        //HTTPD_400_BAD_REQUEST
-
-        return ESP_FAIL;
-    }*/
-
     // Send reply
     free(buffer);
     httpd_resp_send(req, NULL, 0);
@@ -328,12 +300,6 @@ static const httpd_uri_t ambient_light_post = {
 
 
 
-void reboot(void* _) {
-    vTaskDelay(CONFIG_GENIUS_REBOOT_TASK_DELAY_MS / portTICK_RATE_MS);
-    ESP_LOGW(TAG, "Restarting now.\n");
-    fflush(stdout);
-    esp_restart();
-}
 
 static esp_err_t reboot_post_handler(httpd_req_t *req) {
     static const char reboot_msg[] = "Rebooting now !";
@@ -352,6 +318,29 @@ static const httpd_uri_t reboot_post = {
 
 
 
+#if CONFIG_GENIUS_ENABLE_OTA_FW_UPDATE
+static esp_err_t ota_fw_update_post_handler(httpd_req_t *req) {
+    if (simple_ota_update() == ESP_OK) {
+        static const char reboot_msg[] = "Rebooting now !";
+        httpd_resp_send(req, reboot_msg, sizeof(reboot_msg));
+        xTaskCreate(reboot, "reboot", 1024 * 2, (void *)0, 10, NULL);
+        return ESP_OK;
+    }
+
+    httpd_resp_send_err(req, HTTPD_500_INTERNAL_SERVER_ERROR, NULL);
+    return ESP_FAIL;
+}
+
+static const httpd_uri_t ota_fw_update_post = {
+    .uri       = "/ota_fw_update",
+    .method    = HTTP_POST,
+    .handler   = ota_fw_update_post_handler,
+    .user_ctx  = NULL
+};
+#endif
+
+
+
 
 static httpd_handle_t start_webserver(void)
 {
@@ -367,6 +356,9 @@ static httpd_handle_t start_webserver(void)
         httpd_register_uri_handler(server, &state_post);
         httpd_register_uri_handler(server, &ambient_light_post);
         httpd_register_uri_handler(server, &reboot_post);
+    #if CONFIG_GENIUS_ENABLE_OTA_FW_UPDATE
+        httpd_register_uri_handler(server, &ota_fw_update_post);
+    #endif
         return server;
     }
 
