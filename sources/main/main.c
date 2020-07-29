@@ -77,8 +77,6 @@ void app_main(void)
 
     // ================================================
 
-    globals.ambient_light = CONFIG_GENIUS_DEFAULT_AMBIENT_LIGHT;
-    globals.state = ON;
 
     // Init/config i²c
     ESP_ERROR_CHECK(genius_i2c_init());
@@ -94,6 +92,18 @@ void app_main(void)
 
     ESP_ERROR_CHECK(genius_httpd_start());
 
-    // start sending i²c frames
+
+    // start (or not) sending i²c frames
+    globals.ambient_light = CONFIG_GENIUS_DEFAULT_AMBIENT_LIGHT;
+#if defined( CONFIG_GENIUS_I2C_BOOT_STATE_OFF )
+    globals.state = OFF;
+#elif defined( CONFIG_GENIUS_I2C_BOOT_STATE_ON_LIGHT_OFF )
+    globals.state = ON;
     ESP_ERROR_CHECK(genius_i2c_enable(false));
+#elif defined( CONFIG_GENIUS_I2C_BOOT_STATE_ON_LIGHT_ON )
+    globals.state = ON;
+    ESP_ERROR_CHECK(genius_i2c_enable(true));
+#else
+    #error "Initial state UNDEFINED !! PLease check menuconfig"
+#endif
 }
