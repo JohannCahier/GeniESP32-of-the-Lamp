@@ -84,8 +84,6 @@ void app_main(void)
     globals.ambient_light = CONFIG_GENIUS_DEFAULT_AMBIENT_LIGHT;
     globals.state = ON;
 
-    SA2GPIO_init();
-
     // Init/config i²c
     ESP_ERROR_CHECK(genius_i2c_init());
 
@@ -102,6 +100,4 @@ void app_main(void)
 
     // start sending i²c frames
     ESP_ERROR_CHECK(genius_i2c_enable(false));
-
-//     xTaskCreate(SA2GPIO_task, "slave addressed", 1024 * 2, (void *)1, 10, NULL);
 }
